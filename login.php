@@ -2,7 +2,8 @@
 
 $email = '';
 $password = '';
-
+$errMsg = 'Credenziali non corrette';
+var_dump( $_SESSION );
 /*if($loggedInUser){
 
     echo '<script>location.href = "'.ROOT_URL.'?page=homepage.php"</script>';
@@ -19,13 +20,12 @@ if (isset($_POST['login'])) {
   $errMsg = '';
 
   if ($userObj) {
-    $_SESSION['user'] = serialize($userObj);
     if (isset($_SESSION['client_id'])) {
       $cartMgr = new CartManager();
       //var_dump($_SESSION); die;
       $cartMgr->mergeCarts();
     }
-    echo "<script>location.href='".ROOT_URL."user?page=dashboard';</script>";
+    echo "<script>location.href='".ROOT_URL."?page=homepage.php';</script>";
     exit;
   } else {
     $errMsg = 'Credenziali non corrette';
@@ -47,6 +47,6 @@ if (isset($_POST['login'])) {
   <input class="btn btn-primary right" type="submit" value="Login" name="login">
   <a class="underline" href="<?php echo ROOT_URL; ?>?page=register.php">Non hai un account? Registrati</a>
 </form>
-<div class = "text.danger"><?php echo $errMsg ?> </div>
+
 <button class = "bottone-logout" onclick= " window.location.href='http://localhost/Clothe-u_Finale/?page=logout.php'"> Esci</button>
 

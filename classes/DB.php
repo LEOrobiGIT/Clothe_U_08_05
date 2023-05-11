@@ -52,7 +52,7 @@ class DB{
         $strCol = substr($strCol, 0, -1);
     
         $query .= $strCol . ' FROM ' . $tableName;
-    
+        //echo $query;
         $result = mysqli_query($this->conn, $query);
         $resultArray = mysqli_fetch_all($result, MYSQLI_ASSOC);
     
@@ -144,6 +144,43 @@ class DB{
           return -1;
         }
     }
+
+    public function select_filtered($tableName, $columns = array(),$colori,$brand,$prezzo){
+      $strCol = '';
+        foreach($columns as $colName) {
+          $colName =$colName;
+          $strCol .= ' ' . $colName . ',';
+        }
+        $strCol = substr($strCol, 0, -1);
+        $query = "SELECT $strCol FROM $tableName WHERE ";
+        if ($colori!= NULL){
+          foreach($colori as $colore){
+            $colore =$colore;
+            $query .= ' ' . "colore ='". $colore."' ".'OR';
+          }
+          $query = substr($query, 0, -2);
+          $query.= "AND"." ";
+        }
+        if ($brand!= NULL){
+          foreach($brand as $marca){
+            $marca =$marca;
+            $query .=  "marca = '". $marca."' ".'OR';
+          }
+          $query = substr($query, 0, -2);
+          $query.= "AND"." ";
+        }
+        if ($prezzo!= NULL){
+          $query .= "prezzo >= ".$prezzo[0].' '.'AND'.' '.'prezzo <='.$prezzo[1];
+        }
+        //echo $query;
+        $result = mysqli_query($this->conn, $query);
+        $resultArray = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    
+        mysqli_free_result($result);
+    
+        return $resultArray;
+        
+    }
     
 }
 class DBManager {
@@ -171,7 +208,11 @@ class DBManager {
     }
   
     public function create($obj) {
-      $newId = $this->db->insert_one($this->tableName, (array) $obj);
+      $newId = $this->db->insert_one("$this->tableName", (array) $obj);
+      return $newId;
+    }
+    public function create_utente($obj) {
+      $newId = $this->db->insert_one("profili", (array) $obj);
       return $newId;
     }
   
@@ -183,5 +224,13 @@ class DBManager {
     public function update($obj, $id) {
       $rowsUpdated = $this->db->update_one($this->tableName, (array) $obj, (int)$id);
       return (int) $rowsUpdated;
+    }
+    public function getFiltered($colori,$brand,$prezzo){
+      $results = $this->db->select_filtered($this->tableName, $this->columns,$colori,$brand,$prezzo);
+      $objects = array();
+      foreach($results as $result) {
+        array_push($objects, (object)$result);
+      }
+      return $objects;
     }
   }

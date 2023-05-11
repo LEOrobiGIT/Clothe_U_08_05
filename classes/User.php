@@ -3,7 +3,7 @@
 class UserManager extends DBManager{
     public function __costruct(){
         parent::__costruct();
-        $this->tableName = "profili";
+        $this->tableName = 'profili';
         $this->columns = ['id_utente','nome_utente','email','nome','cognome',
         'indirizzo','civico','cap','password','telefono','iscrizione'];
     }
@@ -17,6 +17,7 @@ class UserManager extends DBManager{
 
         if (count($result) > 0 ){
             $user = (object)$result[0];
+            $_SESSION['user'] = $user->id_utente;
             $user = (object)[
                 'id_utente' => $user->id_utente,
                 'nome_utente' => $user->nome_utente,
@@ -53,6 +54,30 @@ class UserManager extends DBManager{
                     'iscrizione'=> $user->iscrizione
                 ];
     }
+
+    public function passwordsMatch($password,$conferma_password){
+        return $password == $conferma_password;
+    }
+
+    public function register($nome_utente,$email,$nome,$cognome,$indirizzo,$civico,$cap,$password, $telefono){
+        $result = $this->db->query("SELECT * FROM profili WHERE email = 'email'");
+        if (count($result) > 0){
+            return false;
+        }
+        $userId = $this -> create_utente([
+            'email'=>$email, 
+            'password'=>$password,
+            'nome_utente'=>$nome_utente,
+            'nome'=>$nome,
+            'cognome'=>$cognome,
+            'indirizzo' =>$indirizzo,
+            'civico' => $civico,
+            'cap' =>$cap,
+            'telefono' => $telefono
+        ]);
+        return $userId;
+    }
+
 }
 
 ?>

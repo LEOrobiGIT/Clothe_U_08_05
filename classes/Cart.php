@@ -1,7 +1,7 @@
 <?php
 class CartManager extends DBManager{
 
-    private $clientId;
+    public $clientId;
     
     public function __construct(){
         parent::__construct();
@@ -71,7 +71,12 @@ class CartManager extends DBManager{
     //restituisce l'id del carrello dell'utente clientid
     public function getCurrentCartId(){
         $cartId = 0;
-        $result = $this -> db->query("SELECT * FROM carrello WHERE utente = '$this->clientId'");
+        if (isset($_SESSION['user'])){
+            $utente =$_SESSION['user'] ;
+            $result = $this -> db->query("SELECT * FROM carrello WHERE utente = '$utente'");
+        }else{
+            $result = $this -> db->query("SELECT * FROM carrello WHERE utente = '$this->clientId'");
+        }
         if (count($result) > 0) {
             $cartId = $result[0]['id_carrello'];
         }else{
@@ -92,11 +97,59 @@ class CartManager extends DBManager{
         if (isset($_SESSION['client_id'])){
             $this ->clientId = $_SESSION['client_id'];
         }else{
-            $str = 12345678;
+            $num = 1234354646;
+            $str = strval($num);
             $_SESSION['client_id'] = $str;
             $this ->clientId = $str;
         }
     }
+    public function mergeCarts(){
+        $utente = $_SESSION['user'];
+        $oldUserCart = $this->db->query("SELECT id_carrello FROM carrello where utente = '$utente'");
+        $oldClientCart = $this->db->query("SELECT id_carrello FROM carrello where utente = '$this->clientId'");
+        
+        //var_dump($oldUserCart, $oldClientCart, $this->userId, $this->clientId); die;
+        if (count($oldClientCart) > 0 AND count($oldUserCart) == 0){
+            var_dump($this->clientId, $utente);
+        ////cambia update con insert_one per non eliminare vecchio carrello client.----------------------------------------------------------------------------
+          $result = $this->db->query("UPDATE carrello SET utente = $utente WHERE utente = '$this->clientId'");
+        }
+  
+        else if (count($oldClientCart) > 0 AND count($oldUserCart) > 0 ) {
+  
+          $userCartId = $oldUserCart[0]['id_carrello'];
+          $userCartItems = $this->getPrdottiCarrello($userCartId);
+  
+          $clientCartId = $oldClientCart[0]['id_carrello'];
+          $clientCartItems = $this->getPrdottiCarrello($clientCartId);
+          
+  
+          foreach($clientCartItems as $clientItem){
+            
+            $isAlreadyInCart = false;
+            $clientProductId = $clientItem['id_prodotto'];
+  
+            foreach($userCartItems as $userItem){
+              if ($userItem['id_prodotto'] == $clientProductId){
+                $isAlreadyInCart = true;
+                $newQuantity = $userItem['quantita'] + $clientItem['quantita'];
+                $this->db->query("UPDATE prod_carrello SET quantita = $newQuantity  WHERE id_carrello = $userCartId AND id_prodotto = $clientProductId");
+                $this->db->query("DELETE FROM prod_carrello WHERE id_carrello = $clientCartId AND id_prodotto = $clientProductId");
+                break;
+              }
+            }
+  
+            if (!$isAlreadyInCart) {
+              $this->db->query("UPDATE prod_carrello SET id_carrello = $userCartId  WHERE id_carrello = $clientCartId AND id_prodotto = $clientProductId");
+            }
+          }
+  
+          $result = $this->db->query("DELETE FROM carrello WHERE id_carrello = $clientCartId");
+        }
+  
+        unset($_SESSION['client_id']);
+        return $result;
+      }
     
 }
 
