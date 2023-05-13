@@ -3,7 +3,7 @@
 ?>
 <?php include './inc/init.php'?>
 <?php include ROOT_PATH . 'template-parts/header.php'?>
-
+        
         <!-- home section starts -->
         <?php include $page ?>
         

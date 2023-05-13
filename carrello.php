@@ -15,12 +15,12 @@ if(isset($_POST['piu'])){
 }
 
 $totale_carrello = $cm->getTotaleCarrello($cartId);
-$prod_car = $cm->getPrdottiCarrello($cartId);
+$prod_car = $cm->getProdottiCarrello($cartId);
 
 ?>
 
 
-<link rel="stylesheet" href="../Clothe-u_Finale/css/styleCarrllo.css">
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleCarrello.css">
 <div class="contenitore">
     <div class="sinistra" > 
         <?php if(count($prod_car) > 0) : ?>
@@ -65,9 +65,17 @@ $prod_car = $cm->getPrdottiCarrello($cartId);
         </div>
     </div>   
     <div class ="destra"> 
-       <button class="acq">Procedi con l'acquisto.</button>
-       <div class="accediacq"><a href="">Accedi</a> per acquistare.</div>
-       <div class ="regacq"><a href = "">Registrati</a> se non hai un account.</div> 
+            <?php if(isset($_SESSION["user"])){
+              echo "
+              <form method = 'post' name ='acquisto' action ='http://localhost/Clothe-u_Finale/?page=acquisto.php'> 
+                <input name = 'procedi' type ='submit' class = 'acq' value ='Procedi con l acquisto.'>
+              </form>
+              ";
+            }else{
+              echo "<div class='accediacq'><a href='http://localhost/Clothe-u_Finale/?page=login.php'>Accedi</a> per acquistare.</div>
+              <div class ='regacq'><a href = 'http://localhost/Clothe-u_Finale/?page=register.php'>Registrati</a> se non hai un account.</div>";
+            }
+            ?>
     </div> 
     <?php else: ?>
       <p class = "lead"> Nessun elemento nel carrello.</p>

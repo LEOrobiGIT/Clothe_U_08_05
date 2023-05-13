@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleProdottii.css"> 
 
 <?php 
 
@@ -31,6 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['brand'] = $_POST['brand']; 
   }else{
     $_SESSION['brand'] = [];
+  }
+  if (!empty($_POST['inizio'])){
+    $_SESSION['inizio'] = $_POST['inizio']; 
+    $_SESSION['fine'] = $_POST['fine'];
+  }else{
+    $_SESSION['inizio'] = [];
+    $_SESSION['inizio'] = [];
   } 
   $_SESSION['slider'] = $_POST['slider'];
 }
@@ -50,9 +57,7 @@ if (isset($_SESSION['slider'])) {
 }
 
 if (!empty($_POST['brand']) || !empty($_POST['slider']) || !empty($_POST['colore']))  {
-  var_dump(!empty($_POST['brand']));
-  var_dump(!empty($_POST['slider']));
-  var_dump(!empty($_POST['colore']));
+  
   if (!empty($_POST['colore'])){
     $filtro_colori = $_POST['colore']; 
   }else{
@@ -66,7 +71,7 @@ if (!empty($_POST['brand']) || !empty($_POST['slider']) || !empty($_POST['colore
 
 ?> 
 
-<link rel="stylesheet" href="../Clothe-u_Finale/css/styleProdotti.css"> 
+
 <div class ="titolo">Prodotti</div>
 <div class= "contenitore"> 
   <div class = "sinistra">
@@ -95,9 +100,9 @@ if (!empty($_POST['brand']) || !empty($_POST['slider']) || !empty($_POST['colore
           </div>
         
         </div>
+
         <b>Scelta del colore<br></b>
-        <div class = "insieme_colori"> 
-          
+        <div class = "insieme_colori">  
           <input class = "col_check" type="checkbox" name="colore[]" value="Blu" <?php if (in_array('Blu', $colori)) { echo 'checked'; } ?>>Blu<br>
           <input class = "col_check" type="checkbox" name="colore[]" value="Rosso" <?php if (in_array('Rosso', $colori)) { echo 'checked'; } ?>>Rosso<br>
           <input class = "col_check" type="checkbox" name="colore[]" value="Verde" <?php if (in_array('Verde', $colori)) { echo 'checked'; } ?>>Verde<br>
@@ -108,9 +113,9 @@ if (!empty($_POST['brand']) || !empty($_POST['slider']) || !empty($_POST['colore
           <input class = "col_check" type="checkbox" name="colore[]" value="Nero" <?php if (in_array('Nero', $colori)) { echo 'checked'; } ?>>Nero<br>
           <input class = "col_check" type="checkbox" name="colore[]" value="Rosa" <?php if (in_array('Rosa', $colori)) { echo 'checked'; } ?>>Rosa<br> 
         </div>
+
         <b>Scelta del Brand<br></b>
-        <div class = "insieme_brand"> 
-          
+        <div class = "insieme_brand">   
           <input class = "col_check" type="checkbox" name="brand[]" value="Nike" <?php if (in_array('Nike', $marche)) { echo 'checked'; } ?>>Nike<br>
           <input class = "col_check" type="checkbox" name="brand[]" value="Adidas" <?php if (in_array('Adidas', $marche)) { echo 'checked'; } ?>>Adidas<br>
           <input class = "col_check" type="checkbox" name="brand[]" value="NewBalance" <?php if (in_array('NewBalance', $marche)) { echo 'checked'; } ?>>New Balance<br>
@@ -120,6 +125,16 @@ if (!empty($_POST['brand']) || !empty($_POST['slider']) || !empty($_POST['colore
           <input class = "col_check" type="checkbox" name="brand[]" value="Converse" <?php if (in_array('Converse', $marche)) { echo 'checked'; } ?>>Converse<br>
           <input class = "col_check" type="checkbox" name="brand[]" value="Vans" <?php if (in_array('Vans', $marche)) { echo 'checked'; } ?>>Vans<br>
         </div>
+
+        <b>Periodo del noleggio<br></b>
+        <div class = "noleggio">
+          <label for="inizio"> Da: </label>
+          <input type="date" id="inizio" name="inizio">
+          <label for="fine"> A: </label>
+          <input type="date" id="fine" name="fine">
+          <small [class.d-none] = ""> Inserisci inizio e fine</small>
+        </div>
+
       </form>  
       <script src="../Clothe-u_Finale/js/sliderscript.js"></script>
       <input class = "filtra" type="button" value="Filtra" onclick="submitForms()" />
@@ -154,3 +169,11 @@ if (!empty($_POST['brand']) || !empty($_POST['slider']) || !empty($_POST['colore
     </div>
   </div>
 </div>
+
+<script>
+  //window.location.href = "<?php echo 'http://localhost/Clothe-u_Finale/?page=prodotti.php'?>";
+  window.onpopstate = function () { 
+    history.pushState(null, null, 'http://localhost/Clothe-u_Finale/?page=homepage.php');
+    history.go(0);
+  };
+</script>

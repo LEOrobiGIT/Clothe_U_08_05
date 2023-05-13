@@ -20,6 +20,8 @@ if (isset($_POST['register'])) {
 
   $email = $_POST['email'];
   $password = $_POST['password'];
+  $encr_password = md5($password);
+  
   $conferma_password =  $_POST['conferma_password'];
   $nome_utente = $_POST['nome_utente'];
   $nome = $_POST['nome'];
@@ -31,7 +33,7 @@ if (isset($_POST['register'])) {
 
   $userMgr = new UserManager();
   if ($userMgr->passwordsMatch($password,$conferma_password)){
-    $userObj = $userMgr->register($nome_utente,$email, $nome,$cognome,$indirizzo,$civico,$cap,$password, $telefono);
+    $userObj = $userMgr->register($nome_utente,$email, $nome,$cognome,$indirizzo,$civico,$cap,$encr_password, $telefono);
     if ($userObj){
       echo "<script>location.href='".ROOT_URL."?page=login.php';</script>";
       exit;
@@ -53,7 +55,7 @@ if (isset($_POST['register'])) {
 <form method="post" class="mb-4">
   <div class="form-group">
     <label for="email">Email</label>
-    <input name="email" id="email" type="text" class="form-control" value="<?php echo $email; ?>">
+    <input name="email" id="email" type="email" class="form-control" value="<?php echo $email; ?>">
   </div>
   <div class="form-group">
     <label for="nome_utente">Nome Utente</label>

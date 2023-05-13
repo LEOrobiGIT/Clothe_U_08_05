@@ -21,9 +21,9 @@ class CartManager extends DBManager{
     }
 
     //ritorna l'insieme dei prodotti del carrello speicificato
-    public function getPrdottiCarrello($cartId){
+    public function getProdottiCarrello($cartId){
         return $this->db->query("
-        SELECT prodotti.nome, prodotti.foto, prod_carrello.taglia, prodotti.prezzo, prod_carrello.quantita,prodotti.id
+        SELECT prodotti.nome as nome, prodotti.foto as foto, prod_carrello.taglia as taglia, prodotti.prezzo as prezzo, prod_carrello.quantita as quantita,prodotti.id as id,prodotti.colore as colore
         FROM prodotti INNER JOIN prod_carrello ON prodotti.id = prod_carrello.id_prodotto
         WHERE prod_carrello.id_carrello = $cartId;
         ");
@@ -108,29 +108,30 @@ class CartManager extends DBManager{
         $oldUserCart = $this->db->query("SELECT id_carrello FROM carrello where utente = '$utente'");
         $oldClientCart = $this->db->query("SELECT id_carrello FROM carrello where utente = '$this->clientId'");
         
+        
         //var_dump($oldUserCart, $oldClientCart, $this->userId, $this->clientId); die;
         if (count($oldClientCart) > 0 AND count($oldUserCart) == 0){
-            var_dump($this->clientId, $utente);
+            echo "L'utente non aveva un carrello, ora lo creo";
         ////cambia update con insert_one per non eliminare vecchio carrello client.----------------------------------------------------------------------------
           $result = $this->db->query("UPDATE carrello SET utente = $utente WHERE utente = '$this->clientId'");
         }
   
         else if (count($oldClientCart) > 0 AND count($oldUserCart) > 0 ) {
-  
+            //L'utente aveva un carrello, ora li unisco;
           $userCartId = $oldUserCart[0]['id_carrello'];
-          $userCartItems = $this->getPrdottiCarrello($userCartId);
+          $userCartItems = $this->getProdottiCarrello($userCartId);
   
           $clientCartId = $oldClientCart[0]['id_carrello'];
-          $clientCartItems = $this->getPrdottiCarrello($clientCartId);
+          $clientCartItems = $this->getProdottiCarrello($clientCartId);
           
   
           foreach($clientCartItems as $clientItem){
             
             $isAlreadyInCart = false;
-            $clientProductId = $clientItem['id_prodotto'];
+            $clientProductId = $clientItem['id'];
   
             foreach($userCartItems as $userItem){
-              if ($userItem['id_prodotto'] == $clientProductId){
+              if ($userItem['id'] == $clientProductId){
                 $isAlreadyInCart = true;
                 $newQuantity = $userItem['quantita'] + $clientItem['quantita'];
                 $this->db->query("UPDATE prod_carrello SET quantita = $newQuantity  WHERE id_carrello = $userCartId AND id_prodotto = $clientProductId");
@@ -147,7 +148,7 @@ class CartManager extends DBManager{
           $result = $this->db->query("DELETE FROM carrello WHERE id_carrello = $clientCartId");
         }
   
-        unset($_SESSION['client_id']);
+        //unset($_SESSION['client_id']);
         return $result;
       }
     

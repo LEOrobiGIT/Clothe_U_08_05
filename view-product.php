@@ -108,7 +108,7 @@
                 <input name ="taglia" id = "43" type = "radio" value="43" >
                 <label for = "43"> 43'</label><br>-->
                 <!--<input name ="quantita" class ="quantita" type = "number" value ="1">-->
-                <input name = "aggiungi_al_c"type  ="submit" class = "btncarrello" value ="Aggiungi al carrello">
+                <input name = "aggiungi_al_c" type ="submit" class = "btncarrello" value ="Aggiungi al carrello">
             </form>
             <script>
 
@@ -130,79 +130,130 @@
                 
 </section>
 
+<!------------------------------------------------------------------------------------------------------------------------------------------------------
 
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleprova.css">
 <section>
-        <h1 class="heading">Prodotti simili</h1>
-        <div class="box-container"> <!-- box container delle nostre scarpe-->
-                <!-- inserisco il primo modello di scarpe-->
-            <div class="row">
+    <div class="contenitore">
+        <div class = "contenitore2">
+            <input type="radio" name="slider" class="d-none" id="s1" checked>
+            <input type="radio" name="slider" class="d-none" id="s2">
+            <input type="radio" name="slider" class="d-none" id="s3">
+            <input type="radio" name="slider" class="d-none" id="s4">
+            <input type="radio" name="slider" class="d-none" id="s5">
+
+            <div class="cards">
+            <label for="s1" id="slide1">
+                <div class="card">
                 <div class="image">
-                    <img src="../images/nike1.webp">
+                    <img src="<?php echo $product->foto?>" alt="">
+                    
                 </div>
-                <div class="content">
-                    <div class="icons">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="cart-btn">Aggiungi al carrello</a>
-                        <a href="#" class="fas fa-share"></a>
-                    </div>
-                    Nike Dunk 
-                    <div class="rating"> 
-                        <i class="fa fa-star fa-2xs" ></i>
-                        <i class="fa fa-star fa-2xs" ></i>
-                        <i class="fa fa-star fa-2xs" ></i>
-                        <i class="fa fa-star fa-2xs" ></i>
-                        <i class="fa fa-star fa-2xs" ></i>
-                    </div>
-                <div class="price"> $12.99 / $15.99</div>
+                <div class="infos">
+                    <span class="name">Nike SuperRep Go</span>
+                    <span class="lorem">Lorem ipsum dolor sit amet, sit amet  adipiscing elit. Aenean vel ansd . Nullam
+                    lorem. Nulla eu
+                    sodales</span>
+                </div>
+                <a href="/contact" class="btn-contact">Details</a>
+                <div class="socials">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <i class="fa-regular fa-heart"></i>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                </div>
+            </label>
+            <label for="s2" id="slide2">
+                <div class="card">
+                <div class="image">
+                    <img src="<?php echo $product->foto?>" alt="">
+                    
+                </div>
+                <div class="infos">
+                    <span class="name">Nike SuperRep Go</span>
+                    <span class="lorem">Lorem ipsum dolor sit amet, sit amet  adipiscing elit. Aenean vel ansd . Nullam
+                    lorem. Nulla eu
+                    sodales</span>
+                </div>
+                <a href="/contact" class="btn-contact">Details</a>
+                <div class="socials">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <i class="fa-regular fa-heart"></i>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                </div>
+            </label>
+            <label for="s3" id="slide3">
+                <div class="card">
+                <div class="image">
+                    <img src="<?php echo $product->foto?>" alt="">
+                    
+                </div>
+                <div class="infos">
+                    <span class="name">Nike SuperRep Go</span>
+                    <span class="lorem">Lorem ipsum dolor sit amet, sit amet  adipiscing elit. Aenean vel ansd . Nullam
+                    lorem. Nulla eu
+                    sodales</span>
+                </div>
+                <a href="/contact" class="btn-contact">Details</a>
+                <div class="socials">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <i class="fa-regular fa-heart"></i>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                </div>
+            </label>
+            <label for="s4" id="slide4">
+                <div class="card">
+                <div class="image">
+                    <img src="<?php echo $product->foto?>" alt="">
+                    
+                </div>
+                <div class="infos">
+                    <span class="name">Nike SuperRep Go</span>
+                    <span class="lorem">Lorem ipsum dolor sit amet, sit amet  adipiscing elit. Aenean vel ansd . Nullam
+                    lorem. Nulla eu
+                    sodales</span>
+                </div>
+                <a href="/contact" class="btn-contact">Details</a>
+                <div class="socials">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <i class="fa-regular fa-heart"></i>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                </div>
+            </label>
+            <label for="s5" id="slide5">
+                <div class="card">
+                <div class="image">
+                    <img src="<?php echo $product->foto?>" alt="">
+                    
+                </div>
+                <div class="infos">
+                    <span class="name">Nike SuperRep Go</span>
+                    <span class="lorem">Lorem ipsum dolor sit amet, sit amet  adipiscing elit. Aenean vel ansd . Nullam
+                    lorem. Nulla eu
+                    sodales</span>
+                </div>
+                <a href="/contact" class="btn-contact">Details</a>
+                <div class="socials">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <i class="fa-regular fa-heart"></i>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                </div>
+            </label>
+
+            
             </div>
         </div>
-        <div class="row">
-            <div class="image">
-                <img src="../images/nike1.webp">
-            </div>
-                    <div class="content">
-                        <div class="icons">
-                            <a href="#" class="fas fa-heart"></a>
-                            <a href="#" class="cart-btn">Aggiungi al carrello</a>
-                            <a href="#" class="fas fa-share"></a>
-                        </div>
-                        Nike Dunk 
-                        <div class="rating"> 
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                        </div>
-                        <div class="price"> $12.99 / $15.99</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="image">
-                        <img src="../images/nike1.webp">
-                    </div>
-                    <div class="content">
-                        <div class="icons">
-                            <a href="#" class="fas fa-heart"></a>
-                            <a href="#" class="cart-btn">Aggiungi al carrello</a>
-                            <a href="#" class="fas fa-share"></a>
-                        </div>
-                        Nike Dunk 
-                        <div class="rating"> 
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                            <i class="fa fa-star fa-2xs" ></i>
-                        </div>
-                        <div class="price"> $12.99 / $15.99</div>
-                    </div>
-                </div>
-                
-            </div>
-            
-
-        </section>
+    </div>
+</section>-->
 
 <!----------inizio script---------------------------->
 
@@ -226,9 +277,16 @@
         
         function aggiorna(id_p) { 
             var button = document.getElementById(id_p);
-            
+            history.pushState(null, null, 'http://localhost/Clothe-u_Finale/?page=prodotti.php');
             window.location.href = "<?php echo 'http://localhost/Clothe-u_Finale/?page=view-product.php&id='.$product ->id ?>" + "&taglia=" +button.id;
         }
+        </script>
+        <script>
+            
+            window.onpopstate = function () {
+                
+                history.go(1);
+            };
         </script>
         
         
