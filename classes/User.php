@@ -5,14 +5,14 @@ class UserManager extends DBManager{
         parent::__costruct();
         $this->tableName = 'profili';
         $this->columns = ['id_utente','nome_utente','email','nome','cognome',
-        'indirizzo','civico','cap','password','telefono','iscrizione'];
+        'indirizzo','civico','cap','password','telefono','iscrizione','attivo'];
     }
 
     public function login($email,$password){
         $result = $this->db->query("
             SELECT *
             FROM profili
-            WHERE email = '$email' AND password = '$password';
+            WHERE email = '$email' AND password = '$password' AND attivo = 1;
         ");
 
         if (count($result) > 0 ){
@@ -29,7 +29,8 @@ class UserManager extends DBManager{
                 'cap' => $user->cap,
                 'password' => $user->password,
                 'telefono' => $user->telefono,
-                'iscrizione'=> $user->iscrizione
+                'iscrizione'=> $user->iscrizione,
+                'attivo' => 1
             ];
             return true;
         }
@@ -51,7 +52,8 @@ class UserManager extends DBManager{
                     'cap' => $user->cap,
                     'password' => $user->password,
                     'telefono' => $user->telefono,
-                    'iscrizione'=> $user->iscrizione
+                    'iscrizione'=> $user->iscrizione,
+                    'attivo' => 1
                 ];
     }
 
@@ -60,7 +62,7 @@ class UserManager extends DBManager{
     }
 
     public function register($nome_utente,$email,$nome,$cognome,$indirizzo,$civico,$cap,$password, $telefono){
-        $result = $this->db->query("SELECT * FROM profili WHERE email = 'email'");
+        $result = $this->db->query("SELECT * FROM profili WHERE email = 'email' AND attivo = 1");
         if (count($result) > 0){
             return false;
         }
@@ -95,10 +97,26 @@ class UserManager extends DBManager{
         }
     }
 
+    public function elimina($id){
+        $result = $this->db->query("
+            SELECT *
+            FROM profili
+            WHERE id_utente = $id;
+        ");
+        if (count($result) > 0 ){
+            $this->db-> delete($id);
+        }  
+        else{
+            return false;
+        }
+    }
+    
+
+
 
     public function getDatiUtente($id_utente){
         return $this->db->query("
-        SELECT profili.telefono as telefono,profili.nome_utente as utente,profili.email as email,profili.nome as nome, profili.cognome as cognome,profili.indirizzo as indirizzo,profili.civico as civico,profili.cap as cap
+        SELECT profili.telefono as telefono,profili.nome_utente as utente,profili.email as email,profili.nome as nome, profili.cognome as cognome,profili.indirizzo as indirizzo,profili.civico as civico,profili.cap as cap,profili.id_utente as id_utente
         FROM profili 
         WHERE profili.id_utente = $id_utente;
         ");

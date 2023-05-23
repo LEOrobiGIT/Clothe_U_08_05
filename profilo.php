@@ -27,6 +27,25 @@ if (isset($_POST['invia'])) {
 }
 
 ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+      $(document).ready(function() {
+        // Gestione del click sul pulsante "Elimina"
+        $('#elimina').click(function() {
+          var id = $(this).data('id');  
+          // Chiamata Ajax per eliminare i dati dal database
+          $.ajax({
+            url: 'elimina.php',
+            type: 'post',
+            data: {id: id},
+            success: function(response) {
+              alert("L'account è stato eliminato correttamente");
+              window.location.href = "http://localhost/Clothe-u_Finale/?page=logout.php";
+            }
+          });
+        });
+      });
+    </script>
 
 <form action="http://localhost/Clothe-u_Finale/?page=profilo.php" method="post" class = "pagina-utente" name = "utente" id ="utente">
 <section class="vh-100" style="background-color: #ffffff;">
@@ -42,7 +61,7 @@ if (isset($_POST['invia'])) {
               <button type = "button" class = "button" id ="modifica"><i class="far fa-edit mb-5 bottone"></i></button>
               <h3><?php echo $dati['email'] ?></h3>
               <a><?php echo $dati['utente'] ?></a>
-              <button type = "button" class = "elimina" id ="elimina"> Elimina Account</button>
+              <button type = "button" class = "elimina" id ="elimina" data-id="<?php echo $dati['id_utente'] ?>"> Elimina Account</button>
             </div>
             <div class="col-md-8">
               <div class="card-body p-4">
@@ -123,5 +142,11 @@ if (isset($_POST['invia'])) {
     psswrd.style.display = "block";
     submitBtn.style.display = "block";
   });
+
+  var delBtn = document.getElementById("elimina");
+  editBtn.addEventListener("click", function() {
+    
+  });
+
 
 </script>

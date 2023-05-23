@@ -3,7 +3,7 @@
 $email = '';
 $password = '';
 $errMsg = False;
-var_dump( $_SESSION );
+
 /*if($loggedInUser){
 
     echo '<script>location.href = "'.ROOT_URL.'?page=homepage.php"</script>';
@@ -34,7 +34,8 @@ if (isset($_POST['login'])) {
   }
 }
 ?>
-
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleLogin.css">
+<div class = "container">
 <h1>Login</h1>
 
 <form method="post" class="mb-4">
@@ -51,9 +52,10 @@ if (isset($_POST['login'])) {
       echo "Credenziali non corrette !!!"; 
     }
   ?>
-  <input class="btn btn-primary right" type="submit" value="Login" name="login">
   <a class="underline" href="<?php echo ROOT_URL; ?>?page=register.php">Non hai un account? Registrati</a>
+  <input class="btn btn-primary right" type="submit" value="Login" name="login">
+  
 </form>
 
 <button class = "bottone-logout" onclick= " window.location.href='http://localhost/Clothe-u_Finale/?page=logout.php'"> Esci</button>
-
+</div>

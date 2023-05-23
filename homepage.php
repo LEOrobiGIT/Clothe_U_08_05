@@ -1,3 +1,4 @@
+
 <section class="home" id="home">
             <div class="content">
                 <h3>Rent your <br>Closet</h3>
