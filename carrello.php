@@ -3,27 +3,54 @@
 $cm = new CartManager();
 $cartId = $cm->getCurrentCartId();
 
+function disponibilita($productId,$size,$inizio,$fine,$quantita){
+  $query = "SELECT * FROM magazzino WHERE magazzino.codice NOT IN 
+  (SELECT id_prod_magazzino FROM prod_ordine WHERE prod_ordine.inizio >= '$inizio' AND prod_ordine.fine <= '$fine') 
+  AND modello = '$productId' AND taglia = '$size'";
+  $conn = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
+  $result = mysqli_query($conn, $query);
+  $num_rows = mysqli_num_rows($result)-$quantita;
+  return $num_rows;
+}
+
 if (isset($_POST['meno'])){
   $productId = $_POST['id'];
   $size = $_POST['taglia'];
-  $cm ->removefromCart($cartId,$productId,$size);
+  $inizio =$_POST['inizio'];
+  $fine=$_POST['fine'];
+  $cm ->removefromCart($cartId,$productId,$size,$inizio,$fine);
 }
 if(isset($_POST['piu'])){
   $productId = $_POST['id'];
   $size = $_POST['taglia'];
-  $cm ->addtoCart($cartId,$productId,$size);
+  $disp = $_POST['disp'];
+  $inizio =$_POST['inizio'];
+  $fine=$_POST['fine'];
+  $quantita = $_POST['quantita'] + 1;
+  echo $quantita;
+  echo $disp;
+  if($disp > 0){
+    $cm ->addtoCart($cartId,$productId,$size,$inizio,$fine);
+  }else{
+    $message = "Non è disponibile";
+    echo "<script type='text/javascript'>alert('$message');</script>";
+  }
+  
 }
+
 
 $totale_carrello = $cm->getTotaleCarrello($cartId);
 $prod_car = $cm->getProdottiCarrello($cartId);
+
 
 ?>
 
 
 <link rel="stylesheet" href="../Clothe-u_Finale/css/styleCarrello.css">
+<?php if(count($prod_car) > 0) : ?>
 <div class="contenitore">
     <div class="sinistra" > 
-        <?php if(count($prod_car) > 0) : ?>
+        
         <h4 class="intestazione">
           <span class="titolo">Il tuo Carrello </span>
           <span class="quantita"><span class ="badge bg-black rounded-pill"><?php echo $totale_carrello['numero_p'] ?></span></span>
@@ -40,15 +67,30 @@ $prod_car = $cm->getProdottiCarrello($cartId);
               <div class ="immagine">
                 <img src="<?php echo $item['foto'] ?>" alt="">
               </div>
-              <div>
+              <div class = "nome">
                 <h6 class="nomep"><?php echo $item['nome'] ?></h6>
               </div>
               <div class = "taglia">
-                <?php echo "Taglia:".$item['taglia'] ?>
+                <?php echo "Taglia: ".$item['taglia'] ?>
               </div>
-              <form method = "post">
+              <div class = "noleggio">
+                <?php echo "<div class = 'inizio'> Dal : ".$item['inizio']."</div>" ?>
+                <?php echo "<div class = 'fine'> Al : ".$item['fine']."</div>" ?>
+              </div>
+              <div class = "disponibilta">
+                <?php 
+                  $disponibilita = disponibilita($item["id"],$item['taglia'],$item["inizio"],$item["fine"],$item['quantita']);
+                  echo "Disponibilità:".$disponibilita 
+                ?>
+              </div>
+              
+              <form method = "post" class = "quantita" >
                 <div class ="btn-group" role = "group"> Quantità
+                    <input type="hidden" name = "inizio" value = "<?php echo $item['inizio']?> "/>
+                    <input type="hidden" name = "fine" value = "<?php echo $item['fine']?> "/>
                     <input type="hidden" name = "taglia" value = "<?php echo $item['taglia']?> "/>
+                    <input type="hidden" name = "disp" value = "<?php echo $disponibilita?> "/>
+                    <input type="hidden" name = "quantita" value = "<?php echo $item['quantita'] ?>"/>
                     <button name = "meno" type="submit" class="bmeno">-</button>
                     <span type="text-muted" class="bq"> <?php echo $item['quantita'] ?>  </span>
                     <button name ="piu" type="submit" class="bpiu">+</button>
@@ -61,7 +103,7 @@ $prod_car = $cm->getProdottiCarrello($cartId);
         </ul>
         <div class="totale">
             <sp>Total (USD)</sp>
-            <sp><strong><?php echo $totale_carrello['costo_totale'] ?></strong></sp>
+            <sp><strong>$<?php echo $totale_carrello['costo_totale'] ?></strong></sp>
         </div>
     </div>   
     <div class ="destra"> 
@@ -78,7 +120,13 @@ $prod_car = $cm->getProdottiCarrello($cartId);
             ?>
     </div> 
     <?php else: ?>
-      <p class = "lead"> Nessun elemento nel carrello.</p>
+      <div class = "lead"> Nessun elemento nel carrello.</div>
+      
+    </div>
     <?php endif;?>   
 </div>
-      
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>

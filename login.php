@@ -26,7 +26,7 @@ if (isset($_POST['login'])) {
       //var_dump($_SESSION); die;
       $cartMgr->mergeCarts();
     }
-    echo "<script>location.href='".ROOT_URL."?page=homepage.php';</script>";
+    echo "<script>location.href='".ROOT_URL."?page=profilo.php';</script>";
     exit;
   } else {
     $errMsg = True;

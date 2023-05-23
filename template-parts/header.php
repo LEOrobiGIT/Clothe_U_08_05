@@ -1,3 +1,4 @@
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <!DOCTYPE html>
 <html>
@@ -6,13 +7,16 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Clothe-u</title>
-
+        <!----- IMPORT ----->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <!-- Font  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <!-- Stile  -->
-        <link rel="stylesheet" href="../Clothe-u_Finale/css/styleFinale2.css">
+        <link rel="stylesheet" href="../Clothe-u_Finale/css/styleHome.css">
         <link rel=" stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     </head>
@@ -40,10 +44,25 @@
             <div class="icons">
                 <a href="#" class="fas fa-heart"></a>
                 <a href="http://localhost/Clothe-u_Finale/?page=carrello.php" class="fas fa-shopping-cart">
-                <span class="badge rounded-pill text-bg-primary js-prodottitotali"></span>
+                <span class="badge rounded-pill text-bg-#333 js-prodottitotali"></span>
                 </a>
-                <a href="http://localhost/Clothe-u_Finale/?page=login.php" class="fas fa-user"></a>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="fas fa-user"></div>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <?php if (!$loggedInUser):?>
+                            <a class="dropdown-item" href="http://localhost/Clothe-u_Finale/?page=login.php">Login</a>
+                        <?php endif;?>
+                        <?php if ($loggedInUser):?>
+                        <a class="dropdown-item" href="http://localhost/Clothe-u_Finale/?page=profilo.php">Profilo</a>
+                        <a class="dropdown-item" href="http://localhost/Clothe-u_Finale/?page=ordini.php">Ordini</a>
+                        <a class="dropdown-item" href="http://localhost/Clothe-u_Finale/?page=logout.php">Logout</a>
+                        <?php endif;?>
+                    </div>
             </div>
+            </div>
+            
             </nav>
             
         

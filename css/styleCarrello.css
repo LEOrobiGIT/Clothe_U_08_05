@@ -39,17 +39,14 @@
     margin-top: 15px;
     justify-content: space-between;
     gap: 20px;
-    
+    padding: 1%;
 }
 .sinistra .gruppo .dacomprare h6{
     font-size: 2rem;
 }
-.sinistra .gruppo .dacomprare .nomep{
-    top :50%;
-    transform: translateY(-50%);
-    margin: 0;
-    position: relative;
-    
+.nome {
+    margin: auto;
+    width: 50%;
 }
 .immagine img{
     width: 60%;
@@ -75,7 +72,9 @@
     background-color: #fff;
 }
 .sinistra .gruppo .dacomprare .prezzo{
-    margin-right:2%;
+    
+    margin: auto;
+    margin-right: 10px;
 }
 .gruppo .totale sp{
     font-size: 3rem;
@@ -104,4 +103,43 @@
     color: rgb(255, 255, 255);
     width: auto;
     
+}
+.lead{
+    text-align: center;
+    font-size: 4rem;
+    padding: 30px;
+    font-weight: 600;
+}
+.scelta {
+    display: flex;
+    width: fit-content;
+    align-items: baseline;
+    gap: 10px;
+}
+.immagine {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    align-items: center;
+    margin: auto;
+    margin-left: 20px;
+}
+.immagine img {
+    width: 70%;
+}
+form.quantita {
+    margin: auto;
+}
+.disponibilta {
+    margin: auto;
+}
+.noleggio {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    width: 40%;
+    justify-content: space-evenly;
+}
+.taglia {
+    margin: auto;
 }

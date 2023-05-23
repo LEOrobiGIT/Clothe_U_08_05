@@ -1,26 +1,34 @@
+<div class = "container">
+    <h1>Contattaci</h1> 
+    <form action="https://formsubmit.co/94ceadf230db037ad8dbf277dd46bf48" method="post"> 
+        <label for="nome">Nome:</label> 
+        <input type="text" name="nome" id="nome" required><br>
 
-<h1>Contattaci</h1> 
-<form action="https://formsubmit.co/94ceadf230db037ad8dbf277dd46bf48" method="post"> 
-    <label for="nome">Nome:</label> 
-    <input type="text" name="nome" id="nome" required><br>
+        <label for="cognome">Cognome:</label>
+        <input type="text" name="cognome" id="cognome" required><br>
 
-    <label for="cognome">Cognome:</label>
-    <input type="text" name="cognome" id="cognome" required><br>
+        <label for="telefono">Telefono:</label>
+        <input type="tel" name="telefono" id="telefono" required><br>
 
-    <label for="telefono">Telefono:</label>
-    <input type="tel" name="telefono" id="telefono" required><br>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required><br>
 
-    <label for="email">Email:</label>
-    <input type="email" name="email" id="email" required><br>
+        <label for="descrizione">Descrizione:</label><br>
+        <textarea name="descrizione" id="descrizione" cols="30" rows="5" required></textarea><br>
 
-    <label for="descrizione">Descrizione:</label><br>
-    <textarea name="descrizione" id="descrizione" cols="30" rows="5" required></textarea><br>
-
-    <input type="submit" value="Invia">
-</form>
-
+        <input type="submit" value="Invia">
+    </form>
+</div>
 
 <style>
+.container{
+    display: flex;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    flex-direction: column;
+}
+
 label { 
     display: block; 
     margin-top: 10px; 
@@ -65,4 +73,7 @@ input, textarea {
         box-sizing: border-box; 
         box-shadow: 0px 0px 10px #ccc; 
     } 
+    h1 {
+    font-size: 3rem;
+}
 </style>

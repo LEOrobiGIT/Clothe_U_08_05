@@ -13,54 +13,70 @@ class CartManager extends DBManager{
     //ritorna il totale dei pezzi nel carrello e il loro costo
     public function getTotaleCarrello($cartId){
         $result = $this->db->query("
-        SELECT SUM(c.quantita) AS numero_p, SUM(p.prezzo * c.quantita) AS costo_totale
+        SELECT SUM(c.quantita) AS numero_p, SUM(p.prezzo * c.quantita * DATEDIFF(c.fine,c.inizio)) AS costo_totale
         FROM prodotti p JOIN prod_carrello c ON p.id = c.id_prodotto
         WHERE c.id_carrello = $cartId;
         ");
+        
         return $result[0];
     }
 
     //ritorna l'insieme dei prodotti del carrello speicificato
     public function getProdottiCarrello($cartId){
         return $this->db->query("
-        SELECT prodotti.nome as nome, prodotti.foto as foto, prod_carrello.taglia as taglia, prodotti.prezzo as prezzo, prod_carrello.quantita as quantita,prodotti.id as id,prodotti.colore as colore
+        SELECT prodotti.nome as nome, prodotti.foto as foto, prod_carrello.taglia as taglia, prodotti.prezzo as prezzo, prod_carrello.quantita as quantita,prodotti.id as id,prodotti.colore as colore,prod_carrello.inizio,prod_carrello.fine,prod_carrello.id as id_prod_carrello
         FROM prodotti INNER JOIN prod_carrello ON prodotti.id = prod_carrello.id_prodotto
         WHERE prod_carrello.id_carrello = $cartId;
         ");
     }
 
+
+    public function getProd_Carrello($cartId){
+        return $this->db->query("
+        SELECT id as id, id_carrello as id_carrello, id_prodotto as id_prodotto, taglia as taglia, quantita as quantita,inizio as inizio,fine as fine
+        FROM prod_carrello
+        WHERE id_carrello = $cartId;
+        ");
+    }
+
     //aggiunge un prodotto al carrello
-    public function addtoCart($cartId,$productId,$size){
+    public function addtoCart($cartId,$productId,$size,$inizio,$fine){
         $quantita = 0;
-        $result = $this -> db->query("SELECT quantita FROM prod_carrello WHERE id_carrello = $cartId AND id_prodotto = $productId AND taglia = $size");
+        $result = $this -> db->query("SELECT quantita FROM prod_carrello WHERE id_carrello = '$cartId' AND id_prodotto = '$productId' AND taglia = '$size' AND inizio = '$inizio' AND fine='$fine'");
         if (count($result) >0){
             $quantita = $result[0]['quantita'];
         }
         $quantita = $quantita + 1;
         if (count($result) >0){
-            $this -> db->execute("UPDATE prod_carrello SET quantita = $quantita WHERE id_carrello = $cartId AND id_prodotto = $productId AND taglia = $size ");
+            $this -> db->execute("UPDATE prod_carrello SET quantita = '$quantita' WHERE id_carrello = '$cartId' AND id_prodotto = '$productId' AND taglia = '$size' AND inizio = '$inizio' AND fine='$fine' ");
         } else{
             $cartItemManager = new CartItemManager();
             $newId = $cartItemManager -> create([
                 'id_carrello' =>$cartId,
                 'id_prodotto' =>$productId,
                 'taglia' => $size,
-                'quantita'=>$quantita
+                'quantita'=>$quantita,
+                'inizio'=>$inizio,
+                'fine'=>$fine
             ]);
         }
         
     }
 
-    public function removefromCart($cartId,$productId,$size){
+    public function updateCart($cartId,$productId,$inizio,$fine){
+        $this -> db->execute("UPDATE prod_carrello SET inizio = '$inizio',fine = '$fine' WHERE id = '$productId'");   
+    }
+
+    public function removefromCart($cartId,$productId,$size,$inizio,$fine){
         $quantita = 0;
-        $result = $this -> db->query("SELECT quantita,id FROM prod_carrello WHERE id_carrello = $cartId AND id_prodotto = $productId AND taglia = $size");
+        $result = $this -> db->query("SELECT quantita,id FROM prod_carrello WHERE id_carrello = '$cartId' AND id_prodotto = '$productId' AND taglia = '$size' AND inizio = '$inizio' AND fine='$fine'");
         $prod_car_id = $result[0]['id'];
         if (count($result) >0){
             $quantita = $result[0]['quantita'];
         }
         $quantita = $quantita - 1;
         if ($quantita >0){
-            $this -> db->execute("UPDATE prod_carrello SET quantita = $quantita WHERE id_carrello = $cartId AND id_prodotto = $productId AND taglia = $size ");
+            $this -> db->execute("UPDATE prod_carrello SET quantita = '$quantita' WHERE id_carrello = '$cartId' AND id_prodotto = '$productId' AND taglia = '$size' AND inizio = '$inizio' AND fine='$fine' ");
         } else{
             $cartItemManager = new CartItemManager();
             $newId = $cartItemManager -> delete($prod_car_id);
@@ -158,7 +174,7 @@ class CartManager extends DBManager{
 class CartItemManager extends DBManager{
     public function __construct(){
         parent::__construct();
-        $this->columns = array( 'id', 'id_carrello', 'id_prodotto','taglia','quantita' );
+        $this->columns = array( 'id', 'id_carrello', 'id_prodotto','taglia','quantita','inizio','fine' );
         $this->tableName = 'prod_carrello';
       }
 }

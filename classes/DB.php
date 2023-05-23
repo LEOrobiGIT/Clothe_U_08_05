@@ -145,7 +145,7 @@ class DB{
         }
     }
 
-    public function select_filtered($tableName, $columns = array(),$colori,$brand,$prezzo){
+    public function select_filtered($tableName, $columns = array(),$colori,$brand,$prezzo,$inizio,$fine){
       $strCol = '';
         foreach($columns as $colName) {
           $colName =$colName;
@@ -169,10 +169,17 @@ class DB{
           $query = substr($query, 0, -2);
           $query.= "AND"." ";
         }
+        if ($inizio!= NULL){
+          $nuova_query ="SELECT modello FROM magazzino WHERE magazzino.codice NOT IN
+          (SELECT id_prod_magazzino FROM prod_ordine 
+          WHERE prod_ordine.inizio >= '$inizio' AND prod_ordine.fine <= '$fine')";
+          $query .= $tableName. ".id IN (". $nuova_query.")".' ';
+          $query.= "AND"." ";
+        }
         if ($prezzo!= NULL){
           $query .= "prezzo >= ".$prezzo[0].' '.'AND'.' '.'prezzo <='.$prezzo[1];
         }
-        //echo $query;
+        echo $query;
         $result = mysqli_query($this->conn, $query);
         $resultArray = mysqli_fetch_all($result, MYSQLI_ASSOC);
     
@@ -215,6 +222,10 @@ class DBManager {
       $newId = $this->db->insert_one("profili", (array) $obj);
       return $newId;
     }
+    public function create_ordine($obj) {
+      $newId = $this->db->insert_one("ordini", (array) $obj);
+      return $newId;
+    }
   
     public function delete($id) {
       $rowsDeleted = $this->db->delete_one($this->tableName, (int)$id);
@@ -225,8 +236,9 @@ class DBManager {
       $rowsUpdated = $this->db->update_one($this->tableName, (array) $obj, (int)$id);
       return (int) $rowsUpdated;
     }
-    public function getFiltered($colori,$brand,$prezzo){
-      $results = $this->db->select_filtered($this->tableName, $this->columns,$colori,$brand,$prezzo);
+    public function getFiltered($colori,$brand,$prezzo,$inizio,$fine){
+      //echo "colori = ".var_dump($colori)." brand = ".var_dump($brand)."prezzo = ".var_dump($prezzo)." inizio = ".$inizio." fine = ".$fine;
+      $results = $this->db->select_filtered($this->tableName, $this->columns,$colori,$brand,$prezzo,$inizio,$fine);
       $objects = array();
       foreach($results as $result) {
         array_push($objects, (object)$result);

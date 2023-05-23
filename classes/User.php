@@ -78,6 +78,32 @@ class UserManager extends DBManager{
         return $userId;
     }
 
+    public function aggiorna($nome_utente,$email, $nome,$cognome,$indirizzo,$civico,$cap,$telefono,$encr_password){
+        $result = $this->db->query("
+            SELECT *
+            FROM profili
+            WHERE email = '$email' AND password = '$encr_password';
+        ");
+        if (count($result) > 0 ){
+            $user = (object)$result[0];
+            $this->db->execute("UPDATE profili SET nome_utente = '$nome_utente',nome = '$nome',cognome = '$cognome',indirizzo = '$indirizzo',civico = '$civico',cap = '$cap',telefono = '$telefono'
+            WHERE email = '$email' AND password = '$encr_password' ");
+            return true;
+        }  
+        else{
+            return false;
+        }
+    }
+
+
+    public function getDatiUtente($id_utente){
+        return $this->db->query("
+        SELECT profili.telefono as telefono,profili.nome_utente as utente,profili.email as email,profili.nome as nome, profili.cognome as cognome,profili.indirizzo as indirizzo,profili.civico as civico,profili.cap as cap
+        FROM profili 
+        WHERE profili.id_utente = $id_utente;
+        ");
+    }
+
 }
 
 ?>
