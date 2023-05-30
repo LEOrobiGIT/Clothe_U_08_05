@@ -39,7 +39,7 @@ class DB{
       $stmt = $this->pdo->prepare($sql);
       $stmt ->execute();
     }
-    
+    //seleziona tutto
     public function select_all($tableName, $columns = array()) {
 
         $query = 'SELECT ';
@@ -60,7 +60,7 @@ class DB{
     
         return $resultArray;
     }
-    
+    //selezione di un elemento con id
     public function select_one($tableName, $columns = array(), $id) {
     
         $strCol = '';
@@ -79,7 +79,7 @@ class DB{
     
         return $resultArray;
     }
-    
+    //cancellazione
     public function delete_one($tableName, $id) {
     
         $id = $id;
@@ -94,7 +94,7 @@ class DB{
           return -1;
         }
     }
-    
+    //aggiornamento
     public function update_one($tableName, $columns = array(), $id) {
     
         $id = esc($id);
@@ -116,7 +116,7 @@ class DB{
           return -1;
         }
     }
-    
+    //funzione per inserimento di valori nella tabella
     public function insert_one ($tableName, $columns = array()) {
     
         $strCol = '';
@@ -144,7 +144,7 @@ class DB{
           return -1;
         }
     }
-
+    //funzione che esegue la query per il filtro
     public function select_filtered($tableName, $columns = array(),$colori,$brand,$prezzo,$inizio,$fine){
       $strCol = '';
         foreach($columns as $colName) {
@@ -179,7 +179,7 @@ class DB{
         if ($prezzo!= NULL){
           $query .= "prezzo >= ".$prezzo[0].' '.'AND'.' '.'prezzo <='.$prezzo[1];
         }
-        echo $query;
+        //echo $query;
         $result = mysqli_query($this->conn, $query);
         $resultArray = mysqli_fetch_all($result, MYSQLI_ASSOC);
     
@@ -199,12 +199,12 @@ class DBManager {
     public function __construct(){
       $this->db = new DB();
     }
-  
+    //restituisce i dati di un elemento della tabella
     public function get($id) {
       $resultArr = $this->db->select_one($this->tableName, $this->columns, (int)$id);
       return (object) $resultArr;
     }
-  
+    //restituisce tutti i dati di una tabella
     public function getAll() {
       $results = $this->db->select_all($this->tableName, $this->columns);
       $objects = array();
@@ -213,29 +213,32 @@ class DBManager {
       }
       return $objects;
     }
-  
+    
     public function create($obj) {
       $newId = $this->db->insert_one("$this->tableName", (array) $obj);
       return $newId;
     }
+    //crea un nuovo utente
     public function create_utente($obj) {
       $newId = $this->db->insert_one("profili", (array) $obj);
       return $newId;
     }
+    //crea un nuovo ordine
     public function create_ordine($obj) {
       $newId = $this->db->insert_one("ordini", (array) $obj);
       return $newId;
     }
-  
+    //cancella dalla tabella
     public function delete($id) {
       $rowsDeleted = $this->db->delete_one($this->tableName, (int)$id);
       return (int) $rowsDeleted;
     }
-  
+  //aggiorna la tabella 
     public function update($obj, $id) {
       $rowsUpdated = $this->db->update_one($this->tableName, (array) $obj, (int)$id);
       return (int) $rowsUpdated;
     }
+    //ritorna l'insieme dei prodotti che rispetto il filtro specificato 
     public function getFiltered($colori,$brand,$prezzo,$inizio,$fine){
       //echo "colori = ".var_dump($colori)." brand = ".var_dump($brand)."prezzo = ".var_dump($prezzo)." inizio = ".$inizio." fine = ".$fine;
       $results = $this->db->select_filtered($this->tableName, $this->columns,$colori,$brand,$prezzo,$inizio,$fine);

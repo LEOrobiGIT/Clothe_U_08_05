@@ -1,5 +1,5 @@
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleRegistrati.css">
 <?php
-
 $email = '';
 $password = '';
 $conferma_password = '';
@@ -49,51 +49,90 @@ if (isset($_POST['register'])) {
   
 }
 ?>
+<div class = "container2">
+  <h1>Registrazione</h1>
+  <form method="post" class="mb-4" onsubmit="return validaForm()" action ="http://localhost/Clothe-u_Finale/?page=confermaregistrazione.php">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input name="email" id="email" type="email" class="form-control" value="<?php echo $email; ?>" required minlength = "6">
+    </div>
+    <div class="form-group">
+      <label for="nome_utente">Nome Utente</label>
+      <input name="nome_utente" id="nome_utente" type="text" class="form-control" value="<?php echo $nome_utente; ?>" required minlength = "4" maxlength ="20">
+    </div>
+    <div class="form-group">
+      <label for="nome">Nome </label>
+      <input name="nome" id="nome" type="text" class="form-control" value="<?php echo $nome; ?>" required minlength = "2" maxlength = "50">
+    </div>
+    <div class="form-group">
+      <label for="cognome">Cognome </label>
+      <input name="cognome" id="cognome" type="text" class="form-control" value="<?php echo $cognome; ?>" required minlength = "2" maxlength = "50">
+    </div>
+    <div class="form-group">
+      <label for="indirizzo">Indirizzo </label>
+      <input name="indirizzo" id="indirizzo" type="text" class="form-control" value="<?php echo $indirizzo; ?>" minlength = "4" maxlength = "50">
+    </div>
+    <div class="form-group">
+      <label for="civico">Civico </label>
+      <input name="civico" id="civico" type="text" class="form-control" value="<?php echo $civico; ?>" maxlength = "10">
+    </div>
+    <div class="form-group">
+      <label for="cap">CAP </label>
+      <input name="cap" id="cap" type="text" class="form-control" value="<?php echo $cap; ?>" minlength = "5" maxlength ="5">
+    </div>
+    <div class="form-group">
+      <label for="telefono">Telefono </label>
+      <input name="telefono" id="telefono" type="text" class="form-control" value="<?php echo $telefono; ?>" minlength = "3" maxlength ="20">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input name="password" id="password" type="password" class="form-control" value="<?php echo $password; ?>" required minlength = "8" maxlength = "20">
+    </div>
+    <div class="form-group">
+      <label for="conferma_password">Conferma password</label>
+      <input name="conferma_password" id="conferma_password" type="password" class="form-control" value="<?php echo $conferma_password; ?>" required minlength = "8" maxlength = "20">
+    </div>
+    <input class="btn btn-primary right" type="submit" value="Registrati" name="register">
+  </form>
+  <script>
+  function validaForm() {
+    var nome = document.getElementById('nome').value;
+    var cognome = document.getElementById('cognome').value;
+    var indirizzo = document.getElementById('indirizzo').value;
+    var civico = document.getElementById('civico').value;
+    var cap = document.getElementById('cap').value;
+    var telefono = document.getElementById('telefono').value;
 
-<h1>Registrati</h1>
+    var caratteri = /^[a-zA-Z]+$/;
+    var numeri = /^[0-9]+$/;
 
-<form method="post" class="mb-4">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input name="email" id="email" type="email" class="form-control" value="<?php echo $email; ?>">
-  </div>
-  <div class="form-group">
-    <label for="nome_utente">Nome Utente</label>
-    <input name="nome_utente" id="nome_utente" type="text" class="form-control" value="<?php echo $nome_utente; ?>">
-  </div>
-  <div class="form-group">
-    <label for="nome">Nome </label>
-    <input name="nome" id="nome" type="text" class="form-control" value="<?php echo $nome; ?>">
-  </div>
-  <div class="form-group">
-    <label for="cognome">Cognome </label>
-    <input name="cognome" id="cognome" type="text" class="form-control" value="<?php echo $cognome; ?>">
-  </div>
-  <div class="form-group">
-    <label for="indirizzo">Indirizzo </label>
-    <input name="indirizzo" id="indirizzo" type="text" class="form-control" value="<?php echo $indirizzo; ?>">
-  </div>
-  <div class="form-group">
-    <label for="civico">Civico </label>
-    <input name="civico" id="civico" type="text" class="form-control" value="<?php echo $civico; ?>">
-  </div>
-  <div class="form-group">
-    <label for="cap">CAP </label>
-    <input name="cap" id="cap" type="text" class="form-control" value="<?php echo $cap; ?>">
-  </div>
-  <div class="form-group">
-    <label for="telefono">Telefono </label>
-    <input name="telefono" id="telefono" type="text" class="form-control" value="<?php echo $telefono; ?>">
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input name="password" id="password" type="password" class="form-control" value="<?php echo $password; ?>">
-  </div>
-  <div class="form-group">
-    <label for="conferma_password">Conferma password</label>
-    <input name="conferma_password" id="conferma_password" type="password" class="form-control" value="<?php echo $conferma_password; ?>">
-  </div>
-  <input class="btn btn-primary right" type="submit" value="Register" name="register">
-</form>
+    if (!caratteri.test(nome)) {
+      alert('Inserire solo caratteri per il nome');
+      return false;
+    }
+    if (!caratteri.test(cognome)) {
+      alert('Inserire solo caratteri per il cognome');
+      return false;
+    }
+    if (!caratteri.test(indirizzo)) {
+      alert('Inserire solo caratteri per l\'indirizzo');
+      return false;
+    }
+    if (!numeri.test(civico)) {
+      alert('Inserire solo numeri per il civico');
+      return false;
+    }
+    if (!numeri.test(cap)) {
+      alert('Inserire solo numeri per il CAP');
+      return false;
+    }
+    if (!numeri.test(telefono)) {
+      alert('Inserire solo numeri per il telefono');
+      return false;
+    }
 
+    return true;
+  }
+</script>
+</div>
 

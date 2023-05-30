@@ -1,6 +1,6 @@
 <div class = "container">
     <h1>Contattaci</h1> 
-    <form action="https://formsubmit.co/94ceadf230db037ad8dbf277dd46bf48" method="post"> 
+    <form id = "form" action="https://formsubmit.co/94ceadf230db037ad8dbf277dd46bf48" method="post"> 
         <label for="nome">Nome:</label> 
         <input type="text" name="nome" id="nome" required><br>
 
@@ -16,7 +16,7 @@
         <label for="descrizione">Descrizione:</label><br>
         <textarea name="descrizione" id="descrizione" cols="30" rows="5" required></textarea><br>
 
-        <input type="submit" value="Invia">
+        <input id = "invia" type="submit" value="Invia">
     </form>
 </div>
 
@@ -35,14 +35,16 @@ label {
     font-weight: bold; 
 } 
 input, textarea {
-    width: 100%; 
-    padding: 5px; 
-    margin-top: 5px; 
-    border: 1px solid #ccc; 
-    border-radius: 4px; 
-    box-sizing: border-box; 
-    font-size: 16px; 
-} 
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    display: flex;
+  
+}
     textarea { 
         height: 100px; 
     } 
@@ -75,5 +77,18 @@ input, textarea {
     } 
     h1 {
     font-size: 3rem;
+}
+input#invia {
+    justify-content: center;
+}
+@media(max-width:768px){
+    input, textarea {
+    }
+    #form {
+    /* width: 500px; */
+    /* width: 100%; */
+    /* margin-right: 50px; */
+    width: 400px;
+}
 }
 </style>

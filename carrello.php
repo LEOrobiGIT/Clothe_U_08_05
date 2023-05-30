@@ -110,7 +110,7 @@ $prod_car = $cm->getProdottiCarrello($cartId);
             <?php if(isset($_SESSION["user"])){
               echo "
               <form method = 'post' name ='acquisto' action ='http://localhost/Clothe-u_Finale/?page=acquisto.php'> 
-                <input name = 'procedi' type ='submit' class = 'acq' value ='Procedi con l acquisto.'>
+                <input name = 'procedi' type ='submit' class = 'acq' value ='Acquista'>
               </form>
               ";
             }else{

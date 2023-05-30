@@ -68,6 +68,8 @@ header{
     justify-content: space-between;
     z-index: 1000;
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+    min-width: 500px;
+    
     
 }
 
@@ -164,6 +166,9 @@ header .fa-bars{
     display: none;
 }
 
+
+/*----------------------Inizio Home-----------------------------------*/
+
 .home{
     display: flex;
     align-items: center;
@@ -218,8 +223,7 @@ header .fa-bars{
         background-position:left ;
     }
 }
-/*--------------------Dettagli Prodotto ----------------------------------*/
-
+/*--------------------View Product----------------------------------*/
 
 /* ---------------- Footer ------------------*/
 .container{

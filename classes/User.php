@@ -1,5 +1,5 @@
 <?php 
-
+//tabella profili
 class UserManager extends DBManager{
     public function __costruct(){
         parent::__costruct();
@@ -7,7 +7,7 @@ class UserManager extends DBManager{
         $this->columns = ['id_utente','nome_utente','email','nome','cognome',
         'indirizzo','civico','cap','password','telefono','iscrizione','attivo'];
     }
-
+    //ritorna true o false se c'è corrispondenza tra i dati inseriti e il db
     public function login($email,$password){
         $result = $this->db->query("
             SELECT *
@@ -38,7 +38,7 @@ class UserManager extends DBManager{
     
     }
 
-
+    //crea user
     private function _setUser(){
         $user = (object)$result[0];
                 $user = (object)[
@@ -56,11 +56,11 @@ class UserManager extends DBManager{
                     'attivo' => 1
                 ];
     }
-
+    //ritorna true o false se c'è riscontro tra password e conferma password
     public function passwordsMatch($password,$conferma_password){
         return $password == $conferma_password;
     }
-
+    //crea nuovo profilo utente con i dati inseriti
     public function register($nome_utente,$email,$nome,$cognome,$indirizzo,$civico,$cap,$password, $telefono){
         $result = $this->db->query("SELECT * FROM profili WHERE email = 'email' AND attivo = 1");
         if (count($result) > 0){
@@ -79,7 +79,7 @@ class UserManager extends DBManager{
         ]);
         return $userId;
     }
-
+    //cambia i dati del profilo
     public function aggiorna($nome_utente,$email, $nome,$cognome,$indirizzo,$civico,$cap,$telefono,$encr_password){
         $result = $this->db->query("
             SELECT *
@@ -96,7 +96,7 @@ class UserManager extends DBManager{
             return false;
         }
     }
-
+    //elimina account (non usato)
     public function elimina($id){
         $result = $this->db->query("
             SELECT *

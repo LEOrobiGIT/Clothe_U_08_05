@@ -15,7 +15,7 @@ if (isset($_POST['login'])) {
   $password = $_POST['password'];
   $encr_password = md5($password);
   $userMgr = new UserManager();
-  echo $encr_password;
+  
   
   $userObj = $userMgr->login($email, $encr_password);
   
@@ -34,7 +34,7 @@ if (isset($_POST['login'])) {
   }
 }
 ?>
-<link rel="stylesheet" href="../Clothe-u_Finale/css/styleLogin.css">
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleLoginutente.css">
 <div class = "container">
 <h1>Login</h1>
 
@@ -49,7 +49,7 @@ if (isset($_POST['login'])) {
   </div>
   <?php 
     if($errMsg) { 
-      echo "Credenziali non corrette !!!"; 
+      echo "<div class = 'errore'> Credenziali non corrette !</div>"; 
     }
   ?>
   <a class="underline" href="<?php echo ROOT_URL; ?>?page=register.php">Non hai un account? Registrati</a>
@@ -57,5 +57,4 @@ if (isset($_POST['login'])) {
   
 </form>
 
-<button class = "bottone-logout" onclick= " window.location.href='http://localhost/Clothe-u_Finale/?page=logout.php'"> Esci</button>
 </div>

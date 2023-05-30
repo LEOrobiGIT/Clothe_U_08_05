@@ -8,7 +8,7 @@ class OrderManager extends DBManager{
       }
 
 
-
+    
     public function nuovo_ordine($id_utente,$cartId,$nome,$cognome,$indirizzo,$civico,$cap,$opzione_spedizione,$carta){
             
             $ordineId = $this -> create_ordine([
@@ -97,14 +97,7 @@ class OrderManager extends DBManager{
             AND prod_ordine.fine <= '$fine' 
         )
         ");
-        echo "SELECT codice
-        FROM magazzino
-        WHERE magazzino.modello = '$modello'
-        AND magazzino.codice NOT IN (
-        SELECT id_prod_magazzino
-        FROM prod_ordine
-        WHERE prod_ordine.inizio >= '$inizio'
-        AND prod_ordine.fine <= '$fine'";
+        
         if (count($result) == 0){
             echo "Non è disponibile";
         }else{

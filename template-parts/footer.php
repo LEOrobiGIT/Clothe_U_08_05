@@ -1,8 +1,4 @@
-<?php
-$cm = new CartManager();
-$cartId = $cm->getCurrentCartId();
-$totale_carrello = $cm->getTotaleCarrello($cartId);
-?>
+
 
 
 <div class = "container">

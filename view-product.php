@@ -1,10 +1,40 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!--
+<script>
+//gestione della posizione dello scroll nel caso ci isa un refresh
 
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo({top: scrollpos,behavior: "smooth",});
+    });
 
+    window.onbeforeunload = function(e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+    };
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('a[href^="http://localhost/Clothe-u_Finale/?page=view-product.php&id="]').on('click',function (e) {
+            e.preventDefault();
+
+            var target = this.hash;
+            var $target = $(target);
+
+            $('html, body').stop().animate({
+                'scrollTop': $target.offset().top
+            }, 1000, 'swing', function () {
+                window.location.hash = target;
+            });
+        });
+    });
+</script>
+-->
 <?php 
-    
+    //calcola il numero di prodotti già inseriti nel carrello di una determiata taglia e modello
     function disponibilitacarrello($productId,$size,$inizio,$fine){
         $query = "SELECT quantita FROM prod_carrello WHERE prod_carrello.inizio >= '$inizio' 
         AND prod_carrello.fine <= '$fine' AND prod_carrello.id_prodotto = '$productId'
@@ -33,7 +63,7 @@
         return $num_rows;
       }
 
-    //crea variabili per informazioni sul prodotto e aggiunta al carrello
+    //crea variabili per informazioni sul prodotto e aggiunge al carrello il prodotto selezionato. Crea anche il carrello se non esistente
     if (isset($_POST['aggiungi_al_c'])){
         $productId = $_POST['id'];
         $size = $_POST['taglia'];
@@ -44,6 +74,12 @@
         $cm ->addtoCart($cartId,$productId,$size,$inizio,$fine);
         $_SESSION['inizio'] = $_POST['inizio']; 
         $_SESSION['fine'] = $_POST['fine'];
+        echo "<meta http-equiv='refresh' content='0'>";
+    }
+    if (isset($_POST['vedi_disp'])){
+        $_SESSION['inizio'] = $_POST['inizio']; 
+        $_SESSION['fine'] = $_POST['fine'];
+        $_SESSION['slider'] = ['10','250'];
     }
     // crea variabile prodotto su id
     $id = trim($_GET['id']);
@@ -61,119 +97,128 @@
     echo "
     <style>
         #".$taglia."{
-            border: rgb(85, 39, 39) solid 2px;
-            background-color: rgb(255, 255, 255);
+            border: rgb(98 80 80) solid 2px;
+            background-color: rgb(195 94 104);
             border-radius: 10px;
             margin-top: 5px;
-            margin-left: 7px;
-            background-color: rgb(155, 77, 77);
             color: white;
+            margin-left: 7px;
             width: 80px;
         }
     </style>
     ";} 
 ?>
-<link rel="stylesheet" href="../Clothe-u_Finale/css/stylePaginaprodotto.css">
+<link rel="stylesheet" href="../Clothe-u_Finale/css/stylePaginaProdotto.css">
 <section class="sproduct">
     <div class = "sinistra">
-        <div class="immagine">
-            <img src="<?php echo $product->foto?>" id="MainImg" alt="">
+        <div class = "contenitoreimmagini">
+            <div class="immagine">
+                <img src="<?php echo $product->foto?>" id="MainImg" alt="">
+            </div>
+            <hr>
+            <div class="small-img-group">
+                <div class="small-img">
+                    <img src="<?php echo $product->foto?>" onclick="showImg(this.src)" class = "small-img" alt="">
+                </div>
+                <div class="small-img">
+                    <img src="<?php echo $product->foto2?>" onclick="showImg(this.src)" class = "small-img" alt="">
+                </div>
+                <div class="small-img">
+                    <img src="<?php echo $product->foto3?>" onclick="showImg(this.src)" class = "small-img" alt="">
+                </div>
+            </div>
         </div>
-        <div class="small-img-group">
-            <div class="small-img">
-                <img src="<?php echo $product->foto?>" onclick="showImg(this.src)" class = "small-img" alt="">
-            </div>
-            <div class="small-img">
-                <img src="<?php echo $product->foto2?>" onclick="showImg(this.src)" class = "small-img" alt="">
-            </div>
-            <div class="small-img">
-                <img src="<?php echo $product->foto3?>" onclick="showImg(this.src)" class = "small-img" alt="">
-            </div>
-        </div>
+        <hr>
+        <div class="dettagli">Dettagli prodotto:</div>
+        <div class="descrizione"> <d><?php echo $product->descrizione?></d></div>
     </div>
     <div class = "right">
         <div class="indirizzo" >Home > Prodotti > <?php echo $product->categoria?></div>
+        <hr>
         <div class = "nomep"> <?php echo $product->nome?> </div> 
         <div class = "marca"> <?php echo $product->marca?> </div>  
-        <div class="rating">
+        <!--<div class="rating">
             <i class="fa fa-star fa-2xs" ></i>
             <i class="fa fa-star fa-2xs" ></i>
             <i class="fa fa-star fa-2xs" ></i>
             <i class="fa fa-star fa-2xs" ></i>
             <i class="fa fa-star fa-2xs" ></i>
-        </div> 
-        <div class="dettagli">Dettagli prodotto:</div>
-        <div class="descrizione"> <d><?php echo $product->descrizione?></d></div>
-        <div class="prezzo"> $ <?php echo $product->prezzo?> </div>  
-        <div class="container">
+        </div> -->
+        <hr>
+        <div class="prezzo">Prezzo  :<?php echo "<div class = 'costo'>  $ ".$product->prezzo."</div>"?>  / al giorno</div>  
+        <div class="container1">
+            <?php
+            if (!isset($_SESSION["inizio"]) && !isset($_SESSION["fine"])){
+                echo "<div class = 'messaggio'> Seleziona un periodo per conoscere la disponibilità.</div>";
+            }
+            ?>
             <n>Taglia:</n>
             <div class = "taglia" >  
                 <?php 
-                    if (disponibilita($id,'38',$_SESSION["inizio"],$_SESSION["fine"]) - disponibilitacarrello($id,'38',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b38' value = '38' class = 'numeroscarpa' disabled style='color:red;'>38</button>";
-                    }
-                    else{
-                        echo "<button id = 'b38' value = '38' class = 'numeroscarpa' onclick='aggiorna(this.id)'>38</button>";
-                    }
-                ?>
-                <?php 
-                    if (disponibilita($id,'39',$_SESSION["inizio"],$_SESSION["fine"])- disponibilitacarrello($id,'39',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b39' value = '39' class = 'numeroscarpa' disabled style='color:red;'>39</button>";
-                    }
-                    else{
-                        echo "<button id = 'b39' value = '39' class = 'numeroscarpa' onclick='aggiorna(this.id)'>39</button>";
-                    }
-                ?>
-                <?php 
-                    if (disponibilita($id,'40',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b40' value = '40' class = 'numeroscarpa' disabled style='color:red;'>40</button>";
-                    }
-                    else{
-                        echo "<button id = 'b40' value = '40' class = 'numeroscarpa' onclick='aggiorna(this.id)'>40</button>";
-                    }
-                ?>
-                <?php 
-                    if (disponibilita($id,'41',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b41' value = '41' class = 'numeroscarpa' disabled style='color:red;'>41</button>";
-                    }
-                    else{
-                        echo "<button id = 'b41' value = '41' class = 'numeroscarpa' onclick='aggiorna(this.id)'>41</button>";
-                    }
-                ?>
-                <?php 
-                    if (disponibilita($id,'42',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b42' value = '42' class = 'numeroscarpa' disabled style='color:red;'>42</button>";
-                    }
-                    else{
-                        echo "<button id = 'b42' value = '42' class = 'numeroscarpa' onclick='aggiorna(this.id)'>42</button>";
-                    }
-                ?>
-                <?php 
-                    if (disponibilita($id,'43',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b43' value = '43' class = 'numeroscarpa' disabled style='color:red;'>43</button>";
-                    }
-                    else{
-                        echo "<button id = 'b43' value = '43' class = 'numeroscarpa' onclick='aggiorna(this.id)'>43</button>";
-                    }
-                ?>
-                <?php 
-                    if (disponibilita($id,'44',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b44' value = '44' class = 'numeroscarpa' disabled style='color:red;'>44</button>";
-                    }
-                    else{
-                        echo "<button id = 'b44' value = '44' class = 'numeroscarpa' onclick='aggiorna(this.id)'>44</button>";
-                    }
-                ?>
-                <?php 
-                    if (disponibilita($id,'45',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
-                        echo "<button id = 'b45' value = '45' class = 'numeroscarpa' disabled style='color:red;'>45</button>";
-                    }
-                    else{
-                        echo "<button id = 'b45' value = '45' class = 'numeroscarpa' onclick='aggiorna(this.id)'>45</button>";
-                    }
+                    if (!isset($_SESSION["inizio"]) && !isset($_SESSION["fine"])){
+                        echo "<button id = 'b38' value = '38' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>38</button>";
+                        echo "<button id = 'b39' value = '39' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>39</button>";
+                        echo "<button id = 'b40' value = '40' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>40</button>";
+                        echo "<button id = 'b41' value = '41' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>41</button>";
+                        echo "<button id = 'b42' value = '42' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>42</button>";
+                        echo "<button id = 'b43' value = '43' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>43</button>";
+                        echo "<button id = 'b44' value = '44' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>44</button>";
+                        echo "<button id = 'b45' value = '45' class = 'numeroscarpa' onclick='aggiorna(this.id)' disabled>45</button>";
+                    } else {
+                        if (disponibilita($id,'38',$_SESSION["inizio"],$_SESSION["fine"]) - disponibilitacarrello($id,'38',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b38' value = '38' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>38</button>";
+                        }
+                        else{
+                            echo "<button id = 'b38' value = '38' class = 'numeroscarpa' onclick='aggiorna(this.id)'>38</button>";
+                        }
+                        if (disponibilita($id,'39',$_SESSION["inizio"],$_SESSION["fine"])- disponibilitacarrello($id,'39',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b39' value = '39' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>39</button>";
+                        }
+                        else{
+                            echo "<button id = 'b39' value = '39' class = 'numeroscarpa' onclick='aggiorna(this.id)'>39</button>";
+                        }
+                        if (disponibilita($id,'40',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b40' value = '40' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>40</button>";
+                        }
+                        else{
+                            echo "<button id = 'b40' value = '40' class = 'numeroscarpa' onclick='aggiorna(this.id)'>40</button>";
+                        }
+                        if (disponibilita($id,'41',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b41' value = '41' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>41</button>";
+                        }
+                        else{
+                            echo "<button id = 'b41' value = '41' class = 'numeroscarpa' onclick='aggiorna(this.id)'>41</button>";
+                        }
+                        if (disponibilita($id,'42',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b42' value = '42' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>42</button>";
+                        }
+                        else{
+                            echo "<button id = 'b42' value = '42' class = 'numeroscarpa' onclick='aggiorna(this.id)'>42</button>";
+                        }
+                        if (disponibilita($id,'43',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b43' value = '43' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>43</button>";
+                        }
+                        else{
+                            echo "<button id = 'b43' value = '43' class = 'numeroscarpa' onclick='aggiorna(this.id)'>43</button>";
+                        }
+                        if (disponibilita($id,'44',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b44' value = '44' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>44</button>";
+                        }
+                        else{
+                            echo "<button id = 'b44' value = '44' class = 'numeroscarpa' onclick='aggiorna(this.id)'>44</button>";
+                        }
+                        if (disponibilita($id,'45',$_SESSION["inizio"],$_SESSION["fine"]) == 0){
+                            echo "<button id = 'b45' value = '45' class = 'numeroscarpa' disabled style='color:white;background-color: #a1a1a1;border-color: #727272;'>45</button>";
+                        }
+                        else{
+                            echo "<button id = 'b45' value = '45' class = 'numeroscarpa' onclick='aggiorna(this.id)'>45</button>";
+                        }
+                    }                     
                 ?>
             </div>
         </div>
+        <div class="dettagli2">Dettagli prodotto:</div>
+        <div class="descrizione2"> <d><?php echo $product->descrizione?></d></div>
         <script>
 
         /////disabilita bottoni se non c'è dispinibilita
@@ -200,17 +245,27 @@
             <input name = "quan" type="number" value = "1">
         </div>-->
         <div class="btnshopping">
-            <form method = "post" class ="periodo"> 
+            <form method = "post" class ="periodo" > 
                 <b>Periodo del noleggio<br></b>
+                <div class = "scritta">
+                    <small > Inserisci inizio e fine</small>
+                </div>
                 <div class = "noleggio-inizio">
+                    <?php 
+                        $month = date('m');
+                        $day = date('d');
+                        $year = date('Y');
+                        $tomorrow = date('Y-m-d', strtotime('+1 days'));
+                        $today = $year . '-' . $month . '-' . $day;
+                        $tomorrow2 = date('Y-m-d', strtotime('+2 days'));
+                    ?>
                     <label for="inizio"> Da: </label>
-                    <input type="date" id="inizio" min="<?php echo date('Y-m-d')?>" onchange="setRequired()" name="inizio" value = "<?php echo $_SESSION['inizio'] ?>">
+                    <input type="date" id="inizio" min="<?php echo $tomorrow?>" onchange="setRequired()" name="inizio" value = "<?php echo isset($_SESSION['inizio']) ? $_SESSION['inizio'] : $tomorrow ?>">
                 </div> 
                 <div class = "noleggio-fine">
                     <label for="fine"> A: </label>
-                    <input type="date" id="fine" min="<?php echo date('Y-m-d')?>" onchange="setRequired()" name="fine" value = "<?php echo $_SESSION['fine'] ?>"> 
+                    <input type="date" id="fine" min="<?php echo $tomorrow2?>" onchange="setRequired()" name="fine" value = "<?php echo isset($_SESSION['fine']) ? $_SESSION['fine'] : $tomorrow2 ?>"> 
                 </div>
-                <small > Inserisci inizio e fine</small>
                 <script>
                     
                     function setRequired() {
@@ -233,18 +288,32 @@
 
                     //setta valori minimi e mazzimi per inizio e fine noleggio
                     document.getElementById('inizio').addEventListener('change', function() {
-                    var inizio = document.getElementById('inizio').value;
-                    document.getElementById('fine').min = inizio;
+                    var daraIniziale = document.getElementById('inizio').value;
+                    var data = new Date(dataIniziale);
+                    data.setDate(data.getDate() + 1);
+                    var nuovaData = data.getFullYear() + "-" + ("0" + (data.getMonth() + 1)).slice(-2) + "-" + ("0" + data.getDate()).slice(-2);
+                    document.getElementById('fine').min = nuovaData;
                     });
                     document.getElementById('fine').addEventListener('change', function() {
-                    var fine = document.getElementById('fine').value;
-                    document.getElementById('inizio').max = fine;
+                    var dataFinale = document.getElementById('fine').value;
+                    var data = new Date(dataFinale);
+                    data.setDate(data.getDate() - 1);
+                    var nuovaData2 = data.getFullYear() + "-" + ("0" + (data.getMonth() + 1)).slice(-2) + "-" + ("0" + data.getDate()).slice(-2);
+                    document.getElementById('inizio').max = nuovaData2;
                     });
                 </script>
                 <input name ="id" type = "hidden" value ="<?php echo $product->id?>">
                 <input name ="taglia" id = "formtaglia" type = "hidden" >
+                <?php
+                    if (!isset($_SESSION["inizio"]) && !isset($_SESSION["fine"])){
+                        echo "<input name = 'vedi_disp' type ='submit' class = 'btndisponibilita' value ='Controlla la disponibilità'>";
+                    }elseif(!isset($_GET['taglia'])){
+                        echo "<small > Scegli una taglia per aggiungere al carrello</small>";
+                    }else{
+                        echo "<input name = 'aggiungi_al_c' type ='submit' class = 'btncarrello' value ='Aggiungi al carrello'>";
+                    }
+                ?>
                 
-                <input name = "aggiungi_al_c" type ="submit" class = "btncarrello" value ="Aggiungi al carrello">
             </form>
             <script>
                 //prende il valore id dall'URL
@@ -416,6 +485,7 @@
             history.pushState(null, null, 'http://localhost/Clothe-u_Finale/?page=prodotti.php');
             window.location.href = "<?php echo 'http://localhost/Clothe-u_Finale/?page=view-product.php&id='.$product ->id ?>" + "&taglia=" +button.id;
         }
+        
         </script>
         <script>
             

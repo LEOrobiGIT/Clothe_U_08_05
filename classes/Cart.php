@@ -1,6 +1,10 @@
-<?php
-class CartManager extends DBManager{
 
+<?php
+
+//contiene le classi che costruiscono gli oggetti che rappresentano le tabelle del DB
+
+class CartManager extends DBManager{
+    //Tabella Carrello
     public $clientId;
     
     public function __construct(){
@@ -10,7 +14,7 @@ class CartManager extends DBManager{
         $this -> _initializeClientIdFromSession();
       }
 
-    //ritorna il totale dei pezzi nel carrello e il loro costo
+    //ritorna il numero totale dei pezzi nel carrello e il loro costo totale
     public function getTotaleCarrello($cartId){
         $result = $this->db->query("
         SELECT SUM(c.quantita) AS numero_p, SUM(p.prezzo * c.quantita * DATEDIFF(c.fine,c.inizio)) AS costo_totale
@@ -21,7 +25,7 @@ class CartManager extends DBManager{
         return $result[0];
     }
 
-    //ritorna l'insieme dei prodotti del carrello speicificato
+    //ritorna l'insieme dei prodotti del carrello specificato
     public function getProdottiCarrello($cartId){
         return $this->db->query("
         SELECT prodotti.nome as nome, prodotti.foto as foto, prod_carrello.taglia as taglia, prodotti.prezzo as prezzo, prod_carrello.quantita as quantita,prodotti.id as id,prodotti.colore as colore,prod_carrello.inizio,prod_carrello.fine,prod_carrello.id as id_prod_carrello
@@ -30,7 +34,7 @@ class CartManager extends DBManager{
         ");
     }
 
-
+    //come getProdottiCarrello più generico(non necessario)
     public function getProd_Carrello($cartId){
         return $this->db->query("
         SELECT id as id, id_carrello as id_carrello, id_prodotto as id_prodotto, taglia as taglia, quantita as quantita,inizio as inizio,fine as fine
@@ -62,11 +66,11 @@ class CartManager extends DBManager{
         }
         
     }
-
+    //agiorna un il periodo di noleggio del prodotto specificato nel carrello
     public function updateCart($cartId,$productId,$inizio,$fine){
         $this -> db->execute("UPDATE prod_carrello SET inizio = '$inizio',fine = '$fine' WHERE id = '$productId'");   
     }
-
+    //rimuove dal carrello un certo prodotto
     public function removefromCart($cartId,$productId,$size,$inizio,$fine){
         $quantita = 0;
         $result = $this -> db->query("SELECT quantita,id FROM prod_carrello WHERE id_carrello = '$cartId' AND id_prodotto = '$productId' AND taglia = '$size' AND inizio = '$inizio' AND fine='$fine'");
@@ -103,22 +107,48 @@ class CartManager extends DBManager{
         return $cartId;
     }
 
-    //funzione per il random da associare alla sessione
-    private function random_stringa(){
-        return 1232434343443;
-    }
+    
 
-    //inizializza client id
+    //inizializza client id generando una stringa random di 20 caratteri esegue anche il controllo per la stringa generata controllando nel file "stringhe_generate.txt"
     private function _initializeClientIdFromSession(){
         if (isset($_SESSION['client_id'])){
             $this ->clientId = $_SESSION['client_id'];
         }else{
-            $num = 1234354646;
-            $str = strval($num);
-            $_SESSION['client_id'] = $str;
-            $this ->clientId = $str;
+            $random_string = "";
+            $alreadyGenerated = true;
+            while ($alreadyGenerated) {
+                for ($i = 0; $i < 20; $i++) {
+                    $random_string .= rand(0, 9);
+                }
+            
+                // Apriamo il file di testo contenente le stringhe già generate
+                $filename = "./file/stringhe_generate.txt";
+                $file = fopen($filename, "r");
+
+                // Verifichiamo se la stringa random generata esiste già nel file
+                $alreadyGenerated = false;
+                while (!feof($file)) {
+                    $line = fgets($file);
+                    if (trim($line) == trim($random_string)) {
+                        $alreadyGenerated = true;
+                        break;
+                    }
+                }
+
+                // Se la stringa random non è stata generata in passato, la aggiorniamo nel file
+                if (!$alreadyGenerated) {
+                    $file = fopen($filename, "a");
+                    fwrite($file, $random_string . "\n");
+                    $_SESSION['client_id'] = $random_string;
+                    $this ->clientId = $random_string;
+                }
+                // Chiudiamo il file
+                fclose($file);
+            
+            }
         }
     }
+    //fonde i carrelli dell'utente e del client provvisorio se ha un carrello
     public function mergeCarts(){
         $utente = $_SESSION['user'];
         $oldUserCart = $this->db->query("SELECT id_carrello FROM carrello where utente = '$utente'");
@@ -170,7 +200,7 @@ class CartManager extends DBManager{
     
 }
 
-
+// rappresenta la tabella prod_carrello
 class CartItemManager extends DBManager{
     public function __construct(){
         parent::__construct();

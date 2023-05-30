@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="../Clothe-u_Finale/css/styleProfilo.css">
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleProfiloo.css">
 <?php
 $userMgr = new UserManager();
 $dati_utente = $userMgr->getDatiUtente($_SESSION["user"]);
@@ -47,7 +47,7 @@ if (isset($_POST['invia'])) {
       });
     </script>
 
-<form action="http://localhost/Clothe-u_Finale/?page=profilo.php" method="post" class = "pagina-utente" name = "utente" id ="utente">
+<form action="http://localhost/Clothe-u_Finale/?page=profilo.php" method="post" class = "pagina-utente" name = "utente" id ="utente" onsubmit="return validaForm()">
 <section class="vh-100" style="background-color: #ffffff;">
   <div class="container py-5 h-100" id ="container">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -58,9 +58,9 @@ if (isset($_POST['invia'])) {
               style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;"  >
               <img src="./images/profilo-generico.png"
                 alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
-              <button type = "button" class = "button" id ="modifica"><i class="far fa-edit mb-5 bottone"></i></button>
+              <i type = "button" class = "button fas fa-edit fa-lg mb-5 bottone" id ="modifica"></i>
               <h3><?php echo $dati['email'] ?></h3>
-              <a><?php echo $dati['utente'] ?></a>
+              <p class ="utente"><?php echo $dati['utente'] ?></p>
               <button type = "button" class = "elimina" id ="elimina" data-id="<?php echo $dati['id_utente'] ?>"> Elimina Account</button>
             </div>
             <div class="col-md-8">
@@ -70,35 +70,35 @@ if (isset($_POST['invia'])) {
                 <div class="row pt-1">
                   <div class="col-6 mb-3">
                     <h6>Nome Utente</h6>
-                    <input name = "utente" class="text-muted" value = "<?php echo $dati['utente'] ?>" disabled>
+                    <input name = "utente" class="text-muted" value = "<?php echo $dati['utente'] ?>" disabled minlength = "4" maxlength ="20" required>
                   </div>
                   <div class="col-6 mb-3">
                     <h6>Nome</h6>
-                    <input name="nome" class="text-muted" value ="<?php echo $dati['nome'] ?>" disabled>
+                    <input name="nome" class="text-muted" value ="<?php echo $dati['nome'] ?>" disabled minlength = "2" maxlength = "50" required>
                   </div>
                   <div class="col-6 mb-3">
                     <h6>Cognome</h6>
-                    <input name="cognome" class="text-muted" value ="<?php echo $dati['cognome'] ?>" disabled>
+                    <input name="cognome" class="text-muted" value ="<?php echo $dati['cognome'] ?>" disabled minlength = "2" maxlength = "50" required>
                   </div>
                   <div class="col-6 mb-3">
                     <h6>Indirizzo</h6>
-                    <input name="indirizzo" class="text-muted" value ="<?php echo $dati['indirizzo'] ?>" disabled>
+                    <input name="indirizzo" class="text-muted" value ="<?php echo $dati['indirizzo'] ?>" disabled minlength = "4" maxlength = "50">
                   </div>
                   <div class="col-6 mb-3">
                     <h6>Civico</h6>
-                    <input name="civico" class="text-muted" value ="<?php echo $dati['civico'] ?>" disabled>
+                    <input name="civico" class="text-muted" value ="<?php echo $dati['civico'] ?>" disabled maxlength = "10">
                   </div>
                   <div class="col-6 mb-3">
                     <h6>CAP</h6>
-                    <input name="cap" class="text-muted" value ="<?php echo $dati['cap'] ?>" disabled>
+                    <input name="cap" class="text-muted" value ="<?php echo $dati['cap'] ?>" disabled maxlength ="5">
                   </div>
                   <div class="col-6 mb-3">
                     <h6>Telefono</h6>
-                    <input name="telefono" class="text-muted" value ="<?php echo $dati['telefono'] ?>" disabled>
+                    <input name="telefono" class="text-muted" value ="<?php echo $dati['telefono'] ?>" disabled minlength = "3" maxlength ="20">
                   </div>
                   <div class="col-6 mb-3" style="display:none;" id = "psswrd">
                     <h6>Password</h6>
-                    <input name="password" class="text-muted" value ="" disabled required>
+                    <input name="password" id="password" type="password" class="text-muted" value ="" disabled required>
                   </div>
                   
                 </div>
@@ -149,4 +149,44 @@ if (isset($_POST['invia'])) {
   });
 
 
+</script>
+<script>
+  function validaForm() {
+    var nome = document.getElementById('nome').value;
+    var cognome = document.getElementById('cognome').value;
+    var indirizzo = document.getElementById('indirizzo').value;
+    var civico = document.getElementById('civico').value;
+    var cap = document.getElementById('cap').value;
+    var telefono = document.getElementById('telefono').value;
+
+    var caratteri = /^[a-zA-Z]+$/;
+    var numeri = /^[0-9]+$/;
+
+    if (!caratteri.test(nome)) {
+      alert('Inserire solo caratteri per il nome');
+      return false;
+    }
+    if (!caratteri.test(cognome)) {
+      alert('Inserire solo caratteri per il cognome');
+      return false;
+    }
+    if (!caratteri.test(indirizzo)) {
+      alert('Inserire solo caratteri per l\'indirizzo');
+      return false;
+    }
+    if (!numeri.test(civico)) {
+      alert('Inserire solo numeri per il civico');
+      return false;
+    }
+    if (!numeri.test(cap)) {
+      alert('Inserire solo numeri per il CAP');
+      return false;
+    }
+    if (!numeri.test(telefono)) {
+      alert('Inserire solo numeri per il telefono');
+      return false;
+    }
+
+    return true;
+  }
 </script>

@@ -17,14 +17,12 @@ if (isset($_POST['ordina'])){
     $indirizzo = $_POST['indirizzo'];
     $civico = $_POST['civico'];
     $cap = $_POST['cap'];
-    $inizio = $_POST['inizio'];
-    $fine = $_POST['fine'];
     $opzione_spedizione = $_POST['opzione_spedizione'];
     $carta = $_POST['carta'];
     $prod_carrello = $cm->getProd_Carrello($cartId);
     var_dump($prod_carrello);
     $om = new OrderManager();
-    $ordineId = $om ->nuovo_ordine($id_utente,$cartId,$nome,$cognome,$indirizzo,$civico,$cap,$inizio,$fine,$opzione_spedizione,$carta);
+    $ordineId = $om ->nuovo_ordine($id_utente,$cartId,$nome,$cognome,$indirizzo,$civico,$cap,$opzione_spedizione,$carta);
     foreach($prod_carrello as $item):
         $modello = $item["id_prodotto"];
         $taglia = $item["taglia"];
@@ -61,7 +59,7 @@ if (isset($_POST['aggiorna_carrello'])){
     <div class ="contenitore2">
         <div class ="compila">
         <h2>Compila il form per il pagamento</h2>
-            <form class ="form" method="post" action="" > 
+            <form class ="form" method="post" action="http://localhost/Clothe-u_Finale/?page=conferma.php" > 
                 <label>Nome:</label> 
                 <input type="text" name="nome" value = "<?php echo $dati['nome'] ?>" required><br><br> 
                 <label>Cognome:</label> 
@@ -72,23 +70,8 @@ if (isset($_POST['aggiorna_carrello'])){
                 <input type="text" name="civico" value = "<?php echo $dati['civico'] ?>" required><br><br> 
                 <label>CAP:</label> 
                 <input type="text" name="cap" value = "<?php echo $dati['cap'] ?>" required><br><br> 
-                <label>Inizio noleggio: </label> 
-                <input type="date" id="inizio" name="inizio" min="<?php echo date('Y-m-d')?>" onchange="setRequired()" value = "<?php echo $_SESSION['inizio'] ?>" required><br><br> 
-                <label>Fine noleggio: </label> 
-                <input type="date" id="fine" name="fine" min="<?php echo date('Y-m-d')?>" onchange="setRequired()" value = "<?php echo $_SESSION['fine'] ?>" required><br><br> 
+                
                 <!--<label>Scegli l'opzione di spedizione:</label><br><br> -->
-                <script>
-                    
-                    document.getElementById('inizio').addEventListener('change', function() {
-                    var inizio = document.getElementById('inizio').value;
-                    document.getElementById('fine').min = inizio;
-                    });
-                    document.getElementById('fine').addEventListener('change', function() {
-                    var fine = document.getElementById('fine').value;
-                    document.getElementById('inizio').max = fine;
-                    });
-                    
-                </script>
                 <div class = "scelta">
                     <input type="radio" name="opzione_spedizione" value="ritira_punto_raccolta" required >Ritira in un punto di raccolta<br><br> 
                     <input type="radio" name="opzione_spedizione" value="ricevi_casa" required>Ricevi a casa<br><br> 
@@ -115,6 +98,9 @@ if (isset($_POST['aggiorna_carrello'])){
                         <span class="prezzo">  
                             <?php echo "$". $item['prezzo'] ?>
                         </span>
+                        <div class = "quantita">
+                            <?php echo "x".$item['quantita'] ?>
+                        </div>
                         <div class = "colore">
                             <?php echo "".$item['colore'] ?>
                         </div>
@@ -123,11 +109,11 @@ if (isset($_POST['aggiorna_carrello'])){
                         <b>Periodo del noleggio<br></b>
                         <div class = "noleggio-inizio">
                             <label for="inizio"> Da: </label>
-                            <input type="date" id="inizio" min="<?php echo date('Y-m-d')?>"  name="inizio" value = "<?php echo $item['inizio'] ?>" required>
+                            <?php echo $item['inizio'] ?>
                         </div> 
                         <div class = "noleggio-fine">
                             <label for="fine"> A: </label>
-                            <input type="date" id="fine" min="<?php echo date('Y-m-d')?>" name="fine" value = "<?php echo $item['fine'] ?>" required> 
+                            <?php echo $item['fine'] ?> 
                         </div>
                         <script>
                             
@@ -142,7 +128,7 @@ if (isset($_POST['aggiorna_carrello'])){
                             });
                         </script>
                         <input name ="id" type = "hidden" value ="<?php echo $item['id_prod_carrello']?>">                       
-                        <input name = "aggiorna_carrello" type ="submit" class = "aggiorna_carrello" value ="Cambia giorni">
+                        
                     </form>       
 
 

@@ -1,4 +1,4 @@
-
+//script per controllo degli slider e valori associati
 const slidermin = document.querySelector('#min-price');
 const slidermax = document.querySelector('#max-price');
 const valoreSlidermin = document.querySelector('#min-value');

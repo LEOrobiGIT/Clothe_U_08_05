@@ -1,5 +1,5 @@
 <?php
-
+//oggetto prodotto 
 class ProductsDB {
 
   public $id;
@@ -26,7 +26,7 @@ class ProductsDB {
 }
 
 class ProductManager extends DBManager {
-
+  //tabella prodotti
   public function __construct(){
     parent::__construct();
     $this->columns = array( 'id', 'nome', 'foto','foto2', 'foto3' ,'marca','colore','prezzo', 'descrizione', 'rating','categoria' );

@@ -5,7 +5,7 @@ $ordini = $ord->getOrdini($idUtente);
 ?>
 
 
-<link rel="stylesheet" href="../Clothe-u_Finale/css/styleOrdinii.css">
+<link rel="stylesheet" href="../Clothe-u_Finale/css/styleOrdini.css">
 <?php if(count($ordini) > 0) : ?>
 <div class="contenitore">
 <span class="titolo">Il tuo Carrello </span>
@@ -17,17 +17,17 @@ $ordini = $ord->getOrdini($idUtente);
         <div class="accordion-item">
             <h2 class="accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $item["id_ordine"]?>" aria-expanded="true" aria-controls="collapse<?php echo $item["id_ordine"]?>">
-            Ordine effettuato il : <?php echo $item['istante'] ?>
+            Ordine effettuato il : <?php echo $item['istante']?>
             </button>
             </h2>
             <div id="collapse<?php echo $item["id_ordine"]?>" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <?php foreach($prod_ordinati as $prodotto) :?>
                         <div class ="info_prod">
-                            <p><?php echo $prodotto['nome'] ?></p>
-                            <p>Taglia: <?php echo $prodotto['taglia'] ?></p>
-                            <p>Dal : <?php echo $prodotto['inizio'] ?></p>
-                            <p>Al : <?php echo $prodotto['fine'] ?></p>
+                            <n><?php echo $prodotto['nome'] ?></n>
+                            <t>Taglia: <?php echo $prodotto['taglia'] ?></t>
+                            <d>Dal : <?php echo $prodotto['inizio'] ?></d>
+                            <a>Al : <?php echo $prodotto['fine'] ?></a>
                             <p>$<?php echo $prodotto['prezzo'] ?>/al giorno</p>
                         </div>
                     <?php endforeach; ?>

@@ -1,12 +1,13 @@
 <?php
-    $page = isset ($_GET["page"]) ? $_GET["page"] : 'homepage.php'; 
+    $page = isset ($_GET["page"]) ? $_GET["page"] : 'homepagenew.php'; 
 ?>
 <?php include './inc/init.php'?>
-<?php include ROOT_PATH . 'template-parts/header.php'?>
-        
-        <!-- home section starts -->
-        <?php include $page ?>
-        
-    <!-- Footer ------->
-<?php include ROOT_PATH . 'template-parts/footer.php'?>
+<!---------Header------------>
+<?php include ROOT_PATH . 'template-parts/headernuovo.php'?>  
+
+    <!-- Pagina corrente -->
+    <?php include $page ?>
+    
+<!--------- Footer ------->
+<?php include ROOT_PATH . 'template-parts/footerNew.php'?>
     
